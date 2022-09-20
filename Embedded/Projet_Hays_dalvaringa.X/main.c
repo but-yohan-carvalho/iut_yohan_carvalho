@@ -5,6 +5,7 @@
 #include "IO.h" 
 #include "timer.h"
 #include "PWM.h"
+#include "ADC.h"
 
 
 
@@ -20,6 +21,7 @@ InitIO();
 InitTimer23 ();
 InitTimer1();
 InitPWM();
+InitADC1();
 
 
 
