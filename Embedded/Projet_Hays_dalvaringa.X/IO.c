@@ -63,6 +63,10 @@ void InitIO()
     _TRISC0= 1;
     
     _TRISC11 = 1;
+    
+    _TRISB1 = 1;
+    
+    _TRISE15 = 1;
 
 }
 
