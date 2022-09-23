@@ -6,6 +6,8 @@
 #include "timer.h"
 #include "PWM.h"
 #include "ADC.h"
+#include "Robot.h"
+#include "main.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -37,7 +39,18 @@ LED_ORANGE = 1;
 // Boucle Principale
 /****************************************************************************************************/
 while(1){
-    if (ADCIsConversionFinished())
+     if ( ADCIsConversionFinished ( ) == 1 )
+{
+ADCClearConversionFinishedFlag() ;
+unsigned int * result = ADCGetResult();
+float volts = ((float) result[2])*3.3/4096 * 3.2;
+robotState.distanceTelemetreDroit = 34 / volts - 5;
+volts = ((float)result[1]) * 3.3/4096 * 3.2 ;
+robotState.distanceTelemetreCentre = 34 /volts - 5 ;
+volts = ((float)result[0])*3.3 / 4096*3.2 ;
+robotState.distanceTelemetreGauche = 34 / volts - 5;
+     }
+   /* if (ADCIsConversionFinished())
     {
         ADCClearConversionFinishedFlag();
         unsigned int * result = ADCGetResult();
@@ -46,7 +59,10 @@ while(1){
         ADCValue2 = result[2];
         ADCValue3 = result[3];
         ADCValue4 = result[4];
-        if (ADCValue0 <= 0x15B)
+        
+    }*/
+     
+     if (robotState.distanceTelemetreGauche <= 30)
         {
             LED_ORANGE = 0;
         }
@@ -54,15 +70,15 @@ while(1){
         {
             LED_ORANGE = 1;
         }
-        if (ADCValue1 <= 0x15B)
+        /*if (robotState.distanceTelemetreCentre <= 30)
         {
             LED_BLEUE = 0;
         }
         else
         {
             LED_BLEUE = 1;
-        }
-        if (ADCValue2 <= 0x15B)
+        }*/
+        if (robotState.distanceTelemetreDroit <= 30)
         {
             LED_BLANCHE = 0;
         }
@@ -70,7 +86,22 @@ while(1){
         {
             LED_BLANCHE = 1;
         }
-    }
+     if (robotState.distanceTelemetreExDroit <= 30)
+        {
+            LED_BLANCHE = 0;
+        }
+        else
+        {
+            LED_BLANCHE = 1;
+        }
+     if (robotState.distanceTelemetreExGauche <= 30)
+        {
+            LED_BLANCHE = 0;
+        }
+        else
+        {
+            LED_BLANCHE = 1;
+        }
     
     
 } // fin main
