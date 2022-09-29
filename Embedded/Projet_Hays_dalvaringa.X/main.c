@@ -14,7 +14,7 @@ unsigned int ADCValue1;
 unsigned int ADCValue2;
 unsigned int ADCValue3;
 unsigned int ADCValue4;
-
+unsigned char nextStateRobot;
 int main (void){
 /***************************************************************************************************/
 //Initialisation de l?oscillateur
