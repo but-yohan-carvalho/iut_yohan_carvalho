@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Ports;
+using System.Windows.Threading;
 
 
 namespace RobotInterfaceNet
@@ -23,19 +24,38 @@ namespace RobotInterfaceNet
     /// </summary>
     public partial class MainWindow : Window
     {
+        Robot robot = new Robot();
+        DispatcherTimer timerAffichage;
         ReliableSerialPort serialPort1;
         public MainWindow()
         {
+            timerAffichage = new DispatcherTimer();
+            timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            timerAffichage.Tick += TimerAffichage_Tick;
+            timerAffichage.Start();
+
             InitializeComponent();
             serialPort1 = new ReliableSerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
+           
             
         }
 
-        private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
+        string receivedText="";
+        private void TimerAffichage_Tick(object sender, EventArgs e)
         {
-            textBoxReception.Text += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+           // throw new NotImplementedException();
+           if(robot.receivedText != "")
+            {
+                textBoxReception.Text += robot.receivedText;
+                robot.receivedText = "";
+
+            }
+        }
+        private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
+        { 
+             robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
         }
 
         private void TextBoxReception_TextChanged(object sender, TextChangedEventArgs e)
@@ -46,7 +66,8 @@ namespace RobotInterfaceNet
         bool toggle = false;
         private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
         {
-            functionRecu(1);
+            textBoxReception.Text += "\nReçu via envoyer: " + textBoxEmission.Text;
+            textBoxEmission.Text = "";
             if (!toggle)
             {
                 buttonEnvoyer.Background = Brushes.Aqua;                
@@ -57,21 +78,34 @@ namespace RobotInterfaceNet
             }
             toggle = !toggle;
         }
+    
 
         private void textBoxEmission_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                functionRecu(0);
-                
+                textBoxReception.Text += "\nReçu via entrer: " + textBoxEmission.Text;
+                textBoxEmission.Text = "";
             }
+           
         }
-        public void functionRecu(int a)
+        private void textBoxReception_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Back)
+            {
+                textBoxReception.Text = "";
+            }
+
+        }
+
+
+       /* public void functionRecu(int a)
+        {
+            textBoxReception.Text = receivedText;
             serialPort1.WriteLine(textBoxEmission.Text);
             if (a == 0)
             {
-                textBoxReception.Text += "Reçu via entrer: " + textBoxEmission.Text;
+                textBoxReception.Text += "\nReçu via entrer: " + textBoxEmission.Text;
                 textBoxEmission.Text = "";
             }
             else if (a == 1)
@@ -79,6 +113,23 @@ namespace RobotInterfaceNet
                 textBoxReception.Text += "\nReçu via envoyer: " + textBoxEmission.Text;
                 textBoxEmission.Text = "";
             }
+            
+        }*/
+
+        private void buttonclear_Click(object sender, RoutedEventArgs e)
+        {
+            textBoxReception.Text = "";
+        }
+
+        private void buttonTest_Click(object sender, RoutedEventArgs e)
+        {
+           
+            byte[] byteList = new byte[20];
+            for (int i = 0; i < 20; i++)
+            {
+                byteList[i] = (byte)(2 * i);               
+            }
+            serialPort1.Write(byteList, 0, 20);
         }
     }
 }
