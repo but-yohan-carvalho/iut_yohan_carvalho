@@ -43,19 +43,29 @@ namespace RobotInterfaceNet
         }
 
         string receivedText="";
+
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
-           // throw new NotImplementedException();
-           if(robot.receivedText != "")
+            // throw new NotImplementedException();
+            /* if(robot.receivedText != "")
+              {
+                  textBoxReception.Text += robot.receivedText;
+                  robot.receivedText = "";                 
+              }*/
+            while (robot.byteListReceived.Count != 0)
             {
-                textBoxReception.Text += robot.receivedText;
-                robot.receivedText = "";
-
+                var c = robot.byteListReceived.Dequeue();
+                textBoxReception.Text += c.ToString("X2") + "        ";
             }
+           
         }
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
-        { 
-             robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+        {
+            ///robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+            foreach (var c in e.Data){
+                robot.byteListReceived.Enqueue(c);
+            }
+
         }
 
         private void TextBoxReception_TextChanged(object sender, TextChangedEventArgs e)

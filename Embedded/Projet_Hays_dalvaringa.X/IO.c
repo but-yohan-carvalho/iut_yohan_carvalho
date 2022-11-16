@@ -67,6 +67,11 @@ void InitIO()
     _TRISB1 = 1;
     
     _TRISE15 = 1;
+    
+    
+    
+    _U1RXR = 24; //Remappe le RPI24 sur l'entrée RX1
+    _RP36R = 0b00001; //Remappe la sortie TX1 vers RP36
 
 }
 

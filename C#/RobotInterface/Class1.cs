@@ -14,8 +14,10 @@ namespace RobotInterfaceNet
         public float distanceTelemetreCentre;
 
         public Robot()
-        {
-
+        { 
+        
         }
+            
+        public Queue<byte> byteListReceived = new Queue<byte>(); 
     }
 }

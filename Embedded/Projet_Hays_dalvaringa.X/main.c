@@ -8,6 +8,7 @@
 #include "ADC.h"
 #include "Robot.h"
 #include "main.h"
+#include "UART.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -28,7 +29,7 @@ InitTimer23 ();
 InitTimer1();
 InitPWM();
 InitADC1();
-
+InitUART();
 
 
 LED_BLANCHE = 1;
@@ -49,6 +50,9 @@ volts = ((float)result[1]) * 3.3/4096 * 3.2 ;
 robotState.distanceTelemetreCentre = 34 /volts - 5 ;
 volts = ((float)result[0])*3.3 / 4096*3.2 ;
 robotState.distanceTelemetreGauche = 34 / volts - 5;
+
+SendMessageDirect((unsigned char*)"Bonjour",7);
+__delay32(FCY);
      }
    /* if (ADCIsConversionFinished())
     {
