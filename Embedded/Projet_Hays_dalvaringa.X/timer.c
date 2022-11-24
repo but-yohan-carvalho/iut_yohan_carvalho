@@ -4,6 +4,7 @@
 #include "PWM.h"
 #include "ADC.h"
 #include "main.h"
+#include "UART.h"
 
 //Initialisation d?un timer 32 bits
 
@@ -117,3 +118,4 @@ PR1 = (int)(FCY / freq / 8);
 else
 PR1 = (int)(FCY / freq);
 }
+
