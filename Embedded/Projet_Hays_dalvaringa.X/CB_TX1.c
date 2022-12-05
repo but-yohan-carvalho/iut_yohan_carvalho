@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "CB_TX1.h"
 #define CBTX1_BUFER_SIZE 128
-
+/*
 int cbTx1Head ;
 int cbTx1Tail ;
 unsigned char cbTx1Buffer [CBTX1_BUFFER_SIZE];
@@ -59,4 +59,4 @@ int CB_TX1_GetRemainingSize(void)
 int remainingSize;
 ...
 return remainingSize;
-}
+}*/
