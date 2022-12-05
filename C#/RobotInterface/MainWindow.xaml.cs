@@ -49,7 +49,7 @@ namespace RobotInterfaceNet
             // throw new NotImplementedException();
             /* if(robot.receivedText != "")
               {
-                  textBoxReception.Text += robot.receivedText;
+                  textBoxReception.Text += "Utilisation Serial Port : " +robot.receivedText+ "/n";
                   robot.receivedText = "";                 
               }*/
             while (robot.byteListReceived.Count != 0)
