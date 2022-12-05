@@ -12,7 +12,12 @@
 extern "C" {
 #endif
 
-
+void SendMessage (unsigned char*message,int length);
+void CB_RX1_Add(unsigned char value);
+void SendOne();
+unsigned char CB_RX1_IsTranmitting(void);
+int CB_RX1_GetDataSize ( void );
+int CB_RX1_GetRemainingSize(void);
 
 
 #ifdef	__cplusplus

@@ -14,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <GroupBox  Header="Emission" Grid.Row="0" Grid.Column="0" Margin="10">
             <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" />
@@ -21,8 +22,8 @@
         <GroupBox Header="Reception" Grid.Column="1" Grid.Row="0" Margin="10">
             <TextBox x:Name="textBoxReception"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" />
         </GroupBox>
-        <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="0" HorizontalAlignment="Stretch" Height="30" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Margin="129,0,167,10" Grid.Row="1"/>
-        <Button x:Name="buttonclear" Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="157,0,125,10" Click="buttonclear_Click" Grid.Row="1"/>
-        <Button x:Name="buttonTest" Content="Test" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="342,0,336,10" Grid.ColumnSpan="2" Grid.Row="1" Click="buttonTest_Click"/>
+        <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="0" HorizontalAlignment="Stretch" Height="30" Width="60" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Grid.Row="1"/>
+        <Button x:Name="buttonclear" Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" Height="30" Width="60" VerticalAlignment="Stretch" Click="buttonclear_Click" Grid.Row="2"/>
+        <Button x:Name="buttonTest" Content="Test" Grid.Column="2" HorizontalAlignment="Stretch" Height="30" Width="60"  VerticalAlignment="Stretch" Grid.Row="1" Click="buttonTest_Click"/>
     </Grid>
 </Window>

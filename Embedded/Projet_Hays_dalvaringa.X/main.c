@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <libpic30.h>
 #include <xc.h>
 #include "ChipConfig.h"
 #include "IO.h" 
@@ -44,7 +45,7 @@ int main(void) {
     /****************************************************************************************************/
     while (1) {
         SendMessage((unsigned char*)"Bonjour", 7);
-        __delay32(40000000);
+        __delay32(4000000);
         if (ADCIsConversionFinished() == 1) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
