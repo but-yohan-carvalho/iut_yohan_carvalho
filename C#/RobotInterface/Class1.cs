@@ -18,6 +18,6 @@ namespace RobotInterfaceNet
         
         }
             
-        public Queue<byte> byteListReceived = new Queue<byte>(); 
+        public Queue<byte> byteListReceived = new Queue<byte>();
     }
 }

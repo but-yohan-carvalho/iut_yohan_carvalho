@@ -71,6 +71,6 @@ int CB_TX1_GetDataSize(void) {
 int CB_TX1_GetRemainingSize(void) {
     // return size of remaining size in circular buffer
     int remainingSize;
-    remainingSize = CBTX1_BUFER_SIZE - dataSize;
+    remainingSize = CBTX1_BUFER_SIZE - CB_TX1_GetDataSize();
     return remainingSize;
 }

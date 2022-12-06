@@ -65,9 +65,7 @@ namespace RobotInterfaceNet
             foreach (var c in e.Data){
                 robot.byteListReceived.Enqueue(c);
             }
-
         }
-
         private void TextBoxReception_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -76,8 +74,10 @@ namespace RobotInterfaceNet
         bool toggle = false;
         private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
         {
-            textBoxReception.Text += "\nReçu via envoyer: " + textBoxEmission.Text;
-            textBoxEmission.Text = "";
+            
+            textBoxReception.Text += "Reçu envoyer: " + textBoxEmission.Text + "\n";
+            textBoxEmission.Text = ""; 
+        
             if (!toggle)
             {
                 buttonEnvoyer.Background = Brushes.Aqua;                
@@ -87,24 +87,32 @@ namespace RobotInterfaceNet
                 buttonEnvoyer.Background = Brushes.Beige;
             }
             toggle = !toggle;
-        }
-    
 
+           /* private void messageSent(int send)
+            {
+                if((textBoxEmission.Text !="") && (textBoxEmission.Text != "\r\n"))
+                {
+                    serialPort1.WriteLine(textBoxEmission.Text);
+                    if(send == 1)
+                    {
+                    }
+                }
+                textBoxEmission.Text = "";
+            }*/
+           
+        }
         private void textBoxEmission_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                textBoxReception.Text += "\nReçu via entrer: " + textBoxEmission.Text;
+                var bList = Encoding.UTF8.GetBytes(textBoxEmission.Text);
+                serialPort1.Write(bList, 0, bList.Length);
                 textBoxEmission.Text = "";
             }
-           
         }
         private void textBoxReception_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Back)
-            {
-                textBoxReception.Text = "";
-            }
+            
 
         }
 
@@ -137,7 +145,7 @@ namespace RobotInterfaceNet
             byte[] byteList = new byte[20];
             for (int i = 0; i < 20; i++)
             {
-                byteList[i] = (byte)(2 * i);               
+                byteList[i] = (byte)(2 * i);  
             }
             serialPort1.Write(byteList, 0, 20);
         }
