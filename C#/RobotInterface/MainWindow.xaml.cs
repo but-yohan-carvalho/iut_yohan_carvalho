@@ -188,5 +188,54 @@ namespace RobotInterfaceNet
             mess[position++] = CalculateChecksum(msgFunction, msgPayloadLength, msgPayload);
             serialPort1.Write(mess,0,position);
         }
+        public enum StateReception
+        {
+        Waiting,   
+        FunctionMSB,
+        FunctionLSB,
+        PayloadLengthMSB,
+        PayloadLengthLSB,
+        Payload,
+        CheckSum
+    }
+    StateReception rcvState = StateReception.Waiting ;
+    int msgDecodedFunction = 0;
+    int msgDecodedPayloadLength = 0;
+    byte[] msgDecodedPayload;
+    int msgDecodedPayloadIndex = 0;
+    private void DecodeMessage(byte c)
+    {
+        switch (rcvState)
+        {
+        case StateReception.Waiting:
+        . . .
+        break;
+        case StateReception.FunctionMSB:
+        . . .
+        break;
+        case StateReception.FunctionLSB:
+        . . .
+        break;
+        case StateReception.PayloadLengthMSB:
+        . . .
+        break;
+        case StateReception.PayloadLengthLSB:
+        . . .
+        break;
+        case StateReception.Payload:
+        . . .
+        break;
+        case StateReception.CheckSum:
+        . . .
+        if(calculatedChecksum == receivedChecksum )
+        {
+                // S u c c e s s , on a un message v a l i d e
+            }
+        . . .
+        break;
+            default :
+        r c v S t a t e = S t a t e R e c e p t i o n.Waiting;
+            break;
+        }
     }
 }
