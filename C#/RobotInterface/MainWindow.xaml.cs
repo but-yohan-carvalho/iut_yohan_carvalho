@@ -29,16 +29,15 @@ namespace RobotInterfaceNet
         ReliableSerialPort serialPort1;
         public MainWindow()
         {
-            timerAffichage = new DispatcherTimer();
-            timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
-            timerAffichage.Tick += TimerAffichage_Tick;
-            timerAffichage.Start();
-
             InitializeComponent();
             serialPort1 = new ReliableSerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
-           
+
+            timerAffichage = new DispatcherTimer();
+            timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            timerAffichage.Tick += TimerAffichage_Tick;
+            timerAffichage.Start();
             
         }
 
@@ -52,10 +51,10 @@ namespace RobotInterfaceNet
                   textBoxReception.Text += "Utilisation Serial Port : " +robot.receivedText+ "/n";
                   robot.receivedText = "";                 
               }*/
-            while (robot.byteListReceived.Count != 0)
+            while (robot.byteListReceived.Count > 0)
             {
                 var c = robot.byteListReceived.Dequeue();
-                textBoxReception.Text += "0x" + c.ToString("X2") + "        ";
+                textBoxReception.Text += "0x" + c.ToString("X2") + " ";
             }
            
         }
@@ -66,6 +65,7 @@ namespace RobotInterfaceNet
                 robot.byteListReceived.Enqueue(c);
             }
         }
+
         private void TextBoxReception_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -76,7 +76,8 @@ namespace RobotInterfaceNet
         {
             
             textBoxReception.Text += "Reçu envoyer: " + textBoxEmission.Text + "\n";
-            textBoxEmission.Text = ""; 
+            serialPort1.WriteLine(textBoxEmission.Text);
+            textBoxEmission.Text = "";  
         
             if (!toggle)
             {
@@ -88,6 +89,7 @@ namespace RobotInterfaceNet
             }
             toggle = !toggle;
 
+            
            /* private void messageSent(int send)
             {
                 if((textBoxEmission.Text !="") && (textBoxEmission.Text != "\r\n"))
@@ -141,13 +143,50 @@ namespace RobotInterfaceNet
 
         private void buttonTest_Click(object sender, RoutedEventArgs e)
         {
+            string s = "Bonjour";
+
+            byte[] byteList;// = new byte[20];
+            byteList = Encoding.ASCII.GetBytes(s);
+            /* for (int i = 0; i < 20; i++)
+             {
+                 //byteList[i] = (byte)(2 * i);  
+
+             }*/
+            UartEncodeAndSendMessage(0x0080, byteList.Length, byteList);
+
+        }
+        byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte [] msgPayload)
+        {
+            byte Checksum = 0;
+            Checksum ^= 0xFE;
+            Checksum ^= (byte)(msgFunction >> 8);
+            Checksum ^= (byte)(msgFunction >> 0);
+            Checksum ^= (byte)(msgPayloadLength >> 8);
+            Checksum ^= (byte)(msgPayloadLength >> 0);
            
-            byte[] byteList = new byte[20];
-            for (int i = 0; i < 20; i++)
+            int lg;
+            for (lg = 0; lg < msgPayloadLength; lg++)
             {
-                byteList[i] = (byte)(2 * i);  
+                Checksum ^= msgPayload[lg];
             }
-            serialPort1.Write(byteList, 0, 20);
+            return Checksum;
+        }
+        void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
+        {
+            byte[] mess = new byte [msgPayloadLength+6];
+            int position = 0;
+            mess[position++] = 0xFE;
+            mess[position++] = (byte)(msgFunction >> 8);
+            mess[position++] = (byte)(msgFunction >> 0);
+            mess[position++] = (byte)(msgPayloadLength >> 8);
+            mess[position++] = (byte)(msgPayloadLength >> 0);
+            int i;
+            for (i = 0; i < msgPayloadLength; i++)
+            {
+                mess[position++] = msgPayload[i];
+            }
+            mess[position++] = CalculateChecksum(msgFunction, msgPayloadLength, msgPayload);
+            serialPort1.Write(mess,0,position);
         }
     }
 }

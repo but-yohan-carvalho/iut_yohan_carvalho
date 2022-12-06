@@ -54,7 +54,7 @@ int main(void) {
             SendMessage(&c,1);
         }
        // SendMessage((unsigned char*) "Au revoir", 9);
-        //__delay32(10000);
+        __delay32(1000);
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
