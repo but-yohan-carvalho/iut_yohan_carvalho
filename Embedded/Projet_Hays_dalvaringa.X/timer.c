@@ -6,6 +6,9 @@
 #include "main.h"
 #include "UART.h"
 
+uint16_t tour = 0;
+unsigned long timestamp = 0;
+
 //Initialisation d?un timer 32 bits
 
 void InitTimer23(void) {
@@ -16,8 +19,8 @@ void InitTimer23(void) {
     T2CONbits.TCKPS = 0b00; // Select 1:1 Prescaler
     TMR3 = 0x00; // Clear 32-bit Timer (msw)
     TMR2 = 0x00; // Clear 32-bit Timer (lsw)
-    PR3 = 0x4C4; // Load 32-bit period value (msw)
-    PR2 = 0xB400; // Load 32-bit period value (lsw)
+    PR3 = 0x0BEB; // Load 32-bit period value (msw)
+    PR2 = 0xC200; // Load 32-bit period value (lsw)
     IPC2bits.T3IP = 0x01; // Set Timer3 Interrupt Priority Level
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
     IEC0bits.T3IE = 1; // Enable Timer3 interrupt
@@ -72,7 +75,7 @@ void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
 void InitTimer1(void) {
     //Timer1 pour horodater les mesures (1ms)
     T1CONbits.TON = 0; // Disable Timer
-    T1CONbits.TCKPS = 0b10; //Prescaler
+    //T1CONbits.TCKPS = 0b10; //Prescaler
     //11 = 1:256 prescale value
     //10 = 1:64 prescale value
     //01 = 1:8 prescale value
@@ -83,18 +86,59 @@ void InitTimer1(void) {
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
     T1CONbits.TON = 1; // Enable Timer
-    SetFreqTimer1(50);
+    SetFreqTimer1(150);
 }
 
 //Interruption du timer 1
 
 void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
-    LED_BLEUE = !LED_BLEUE;
-    //PWMUpdateSpeed();
+    //LED_BLEUE = !LED_BLEUE;
+    PWMUpdateSpeed();
     ADC1StartConversionSequence();
 
 
+}
+
+void InitTimer4(void) { //Fréquence de 150Hz
+
+    SetFreqTimer4(1000);
+    //Timer1 pour horodater les mesures (1ms)
+    T4CONbits.TON = 0; // Disable Timer
+    //11 = 1:256 prescale value
+    //10 = 1:64 prescale value
+    //01 = 1:8 prescale value
+    //00 = 1:1 prescale value
+    T4CONbits.TCS = 0; //clock source = internal clock
+
+    IFS1bits.T4IF = 0; // Clear Timer Interrupt Flag
+    IEC1bits.T4IE = 1; // Enable Timer interrupt
+    T4CONbits.TON = 1; // Enable Timer
+}
+
+void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
+    IFS1bits.T4IF = 0;
+    timestamp = timestamp + 1;
+    OperatingSystemLoop();
+
+}
+
+
+void SetFreqTimer4(float freq) {
+    T4CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
+    if (FCY / freq > 65535) {
+        T4CONbits.TCKPS = 0b01; //01 = 1:8 prescaler value
+        if (FCY / freq / 8 > 65535) {
+            T4CONbits.TCKPS = 0b10; //10 = 1:64 prescaler value
+            if (FCY / freq / 64 > 65535) {
+                T4CONbits.TCKPS = 0b11; //11 = 1:256 prescaler value
+                PR4 = (int) (FCY / freq / 256);
+            } else
+                PR4 = (int) (FCY / freq / 64);
+        } else
+            PR4 = (int) (FCY / freq / 8);
+    } else
+        PR4 = (int) (FCY / freq);
 }
 
 void SetFreqTimer1(float freq) {
@@ -113,4 +157,3 @@ void SetFreqTimer1(float freq) {
     } else
         PR1 = (int) (FCY / freq);
 }
-
