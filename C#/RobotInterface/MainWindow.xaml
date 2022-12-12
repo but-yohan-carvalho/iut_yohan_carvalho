@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotInterfaceNet"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="434" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -13,17 +13,32 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="100"/>            
         </Grid.RowDefinitions>
-        <GroupBox  Header="Emission" Grid.Row="0" Grid.Column="0" Margin="10">
-            <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" />
+        <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0">
+            <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" TextChanged="textBoxEmission_TextChanged"/>
         </GroupBox>
-        <GroupBox Header="Reception" Grid.Column="1" Grid.Row="0" Margin="10">
-            <TextBox x:Name="textBoxReception"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" />
+        <GroupBox Header="Réception" Grid.Column="1" Grid.Row="0">
+            <TextBox x:Name="textBoxReception"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" >
+            </TextBox>
         </GroupBox>
-        <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="0" HorizontalAlignment="Stretch" Height="30" Width="60" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Grid.Row="1"/>
-        <Button x:Name="buttonclear" Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" Height="30" Width="60" VerticalAlignment="Stretch" Click="buttonclear_Click" Grid.Row="2"/>
-        <Button x:Name="buttonTest" Content="Test" Grid.Column="2" HorizontalAlignment="Stretch" Height="30" Width="60"  VerticalAlignment="Stretch" Grid.Row="1" Click="buttonTest_Click"/>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+            <GroupBox Header="LEDS" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top">
+                <StackPanel HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="200" Orientation="Vertical">
+                    <CheckBox Content="Led0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <CheckBox Content="Led1" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                    <CheckBox Content="Led2" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Télémètres IR" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="200">
+            </GroupBox>
+            <GroupBox Header="Moteurs" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100">
+            </GroupBox>
+            <StackPanel  Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" >
+                <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Margin="5"/>
+                <Button x:Name="buttonclear" Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonclear_Click" Margin="5"/>
+                <Button x:Name="buttonTest" Content="Test" Grid.Column="1" HorizontalAlignment="Stretch" Width="100"  VerticalAlignment="Stretch" Click="buttonTest_Click" Margin="5" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
