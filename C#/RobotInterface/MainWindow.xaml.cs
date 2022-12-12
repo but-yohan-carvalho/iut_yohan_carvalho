@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 using System.IO.Ports;
 using System.Windows.Threading;
 
-
 namespace RobotInterfaceNet
 {
     /// <summary>
@@ -145,7 +144,7 @@ namespace RobotInterfaceNet
         {
             string s = "Bonjour";
 
-            byte[] byteList;// = new byte[20];
+                byte[] byteList;// = new byte[20];
             byteList = Encoding.ASCII.GetBytes(s);
             /* for (int i = 0; i < 20; i++)
              {
