@@ -38,10 +38,10 @@ namespace RobotInterfaceNet
             timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
             timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
-            
+
         }
 
-        string receivedText="";
+        string receivedText = "";
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
@@ -56,12 +56,12 @@ namespace RobotInterfaceNet
                 var c = robot.byteListReceived.Dequeue();
                 textBoxReception.Text += "0x" + c.ToString("X2") + " ";
             }
-           
+
         }
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
             ///robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
-            foreach (var c in e.Data){
+            foreach (var c in e.Data) {
                 robot.byteListReceived.Enqueue(c);
             }
         }
@@ -74,14 +74,14 @@ namespace RobotInterfaceNet
         bool toggle = false;
         private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
         {
-            
+
             textBoxReception.Text += "Reçu envoyer: " + textBoxEmission.Text + "\n";
             serialPort1.WriteLine(textBoxEmission.Text);
-            textBoxEmission.Text = "";  
-        
+            textBoxEmission.Text = "";
+
             if (!toggle)
             {
-                buttonEnvoyer.Background = Brushes.Aqua;                
+                buttonEnvoyer.Background = Brushes.Aqua;
             }
             else
             {
@@ -89,19 +89,19 @@ namespace RobotInterfaceNet
             }
             toggle = !toggle;
 
-            
-           /* private void messageSent(int send)
-            {
-                if((textBoxEmission.Text !="") && (textBoxEmission.Text != "\r\n"))
-                {
-                    serialPort1.WriteLine(textBoxEmission.Text);
-                    if(send == 1)
-                    {
-                    }
-                }
-                textBoxEmission.Text = "";
-            }*/
-           
+
+            /* private void messageSent(int send)
+             {
+                 if((textBoxEmission.Text !="") && (textBoxEmission.Text != "\r\n"))
+                 {
+                     serialPort1.WriteLine(textBoxEmission.Text);
+                     if(send == 1)
+                     {
+                     }
+                 }
+                 textBoxEmission.Text = "";
+             }*/
+
         }
         private void textBoxEmission_KeyUp(object sender, KeyEventArgs e)
         {
@@ -114,27 +114,27 @@ namespace RobotInterfaceNet
         }
         private void textBoxReception_KeyUp(object sender, KeyEventArgs e)
         {
-            
+
 
         }
 
 
-       /* public void functionRecu(int a)
-        {
-            textBoxReception.Text = receivedText;
-            serialPort1.WriteLine(textBoxEmission.Text);
-            if (a == 0)
-            {
-                textBoxReception.Text += "\nReçu via entrer: " + textBoxEmission.Text;
-                textBoxEmission.Text = "";
-            }
-            else if (a == 1)
-            {
-                textBoxReception.Text += "\nReçu via envoyer: " + textBoxEmission.Text;
-                textBoxEmission.Text = "";
-            }
-            
-        }*/
+        /* public void functionRecu(int a)
+         {
+             textBoxReception.Text = receivedText;
+             serialPort1.WriteLine(textBoxEmission.Text);
+             if (a == 0)
+             {
+                 textBoxReception.Text += "\nReçu via entrer: " + textBoxEmission.Text;
+                 textBoxEmission.Text = "";
+             }
+             else if (a == 1)
+             {
+                 textBoxReception.Text += "\nReçu via envoyer: " + textBoxEmission.Text;
+                 textBoxEmission.Text = "";
+             }
+
+         }*/
 
         private void buttonclear_Click(object sender, RoutedEventArgs e)
         {
@@ -155,7 +155,7 @@ namespace RobotInterfaceNet
             UartEncodeAndSendMessage(0x0080, byteList.Length, byteList);
 
         }
-        byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte [] msgPayload)
+        byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
             byte Checksum = 0;
             Checksum ^= 0xFE;
@@ -163,7 +163,7 @@ namespace RobotInterfaceNet
             Checksum ^= (byte)(msgFunction >> 0);
             Checksum ^= (byte)(msgPayloadLength >> 8);
             Checksum ^= (byte)(msgPayloadLength >> 0);
-           
+
             int lg;
             for (lg = 0; lg < msgPayloadLength; lg++)
             {
@@ -173,7 +173,7 @@ namespace RobotInterfaceNet
         }
         void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
-            byte[] mess = new byte [msgPayloadLength+6];
+            byte[] mess = new byte[msgPayloadLength + 6];
             int position = 0;
             mess[position++] = 0xFE;
             mess[position++] = (byte)(msgFunction >> 8);
@@ -186,56 +186,59 @@ namespace RobotInterfaceNet
                 mess[position++] = msgPayload[i];
             }
             mess[position++] = CalculateChecksum(msgFunction, msgPayloadLength, msgPayload);
-            serialPort1.Write(mess,0,position);
+            serialPort1.Write(mess, 0, position);
         }
         public enum StateReception
         {
-        Waiting,   
-        FunctionMSB,
-        FunctionLSB,
-        PayloadLengthMSB,
-        PayloadLengthLSB,
-        Payload,
-        CheckSum
-    }
-    StateReception rcvState = StateReception.Waiting ;
-    int msgDecodedFunction = 0;
-    int msgDecodedPayloadLength = 0;
-    byte[] msgDecodedPayload;
-    int msgDecodedPayloadIndex = 0;
-    private void DecodeMessage(byte c)
-    {
-        switch (rcvState)
+            Waiting,
+            FunctionMSB,
+            FunctionLSB,
+            PayloadLengthMSB,
+            PayloadLengthLSB,
+            Payload,
+            CheckSum
+        }
+
+        StateReception rcvState = StateReception.Waiting;
+        int msgDecodedFunction = 0;
+        int msgDecodedPayloadLength = 0;
+        byte[] msgDecodedPayload;
+        int msgDecodedPayloadIndex = 0;
+
+        private void DecodeMessage(byte c)
         {
-        case StateReception.Waiting:
-        . . .
-        break;
-        case StateReception.FunctionMSB:
-        . . .
-        break;
-        case StateReception.FunctionLSB:
-        . . .
-        break;
-        case StateReception.PayloadLengthMSB:
-        . . .
-        break;
-        case StateReception.PayloadLengthLSB:
-        . . .
-        break;
-        case StateReception.Payload:
-        . . .
-        break;
-        case StateReception.CheckSum:
-        . . .
-        if(calculatedChecksum == receivedChecksum )
-        {
-                // S u c c e s s , on a un message v a l i d e
+            switch (rcvState)
+            {
+                case StateReception.Waiting:
+                …
+                break;
+                case StateReception.FunctionMSB:
+                …
+                break;
+                case StateReception.FunctionLSB:
+                …
+                break;
+                case StateReception.PayloadLengthMSB:
+                …
+                break;
+                case StateReception.PayloadLengthLSB:
+                …
+                break;
+                case StateReception.Payload:
+                …
+                break;
+                case StateReception.CheckSum:
+                …
+                if (calculatedChecksum == receivedChecksum)
+                    {
+                        //Success, on a un message valide
+                    }
+                …
+                break;
+                default:
+                    rcvState = StateReception.Waiting;
+                    break;
             }
-        . . .
-        break;
-            default :
-        r c v S t a t e = S t a t e R e c e p t i o n.Waiting;
-            break;
         }
     }
 }
