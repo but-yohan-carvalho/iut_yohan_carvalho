@@ -7,7 +7,7 @@
 
 
 #include <xc.h>
-
+#include "main.h"
 #include "IO.h"
 
 
@@ -43,16 +43,35 @@ void InitIO()
     _TRISG6 = 0; //LED Blanche
 
     _TRISG7 = 0; // LED Bleue
-
-    
+   
 
     // Moteurs 
-
+ 
+    _TRISB14 = 0;
+    
+    _TRISB15 = 0;
+    
+    _TRISC6 = 0;
+    
+    _TRISC7 = 0;
 
 
     //********** Configuration des entrées : _TRISxx = 1 ********************************   
 
+    _TRISG9 = 1;
     
+    _TRISC0= 1;
+    
+    _TRISC11 = 1;
+    
+    _TRISB1 = 1;
+    
+    _TRISE15 = 1;
+    
+    
+    
+    _U1RXR = 24; //Remappe le RPI24 sur l'entrée RX1
+    _RP36R = 0b00001; //Remappe la sortie TX1 vers RP36
 
 }
 
