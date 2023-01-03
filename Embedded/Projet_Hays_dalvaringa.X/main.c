@@ -15,6 +15,7 @@
 #include "CB_TX1.h"
 #include "CB_RX1.h"
 #include "UART.h"
+#include "UART_Protocol.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
