@@ -18,6 +18,7 @@ void SendOne();
 unsigned char CB_RX1_IsTranmitting(void);
 int CB_RX1_GetDataSize ( void );
 int CB_RX1_GetRemainingSize(void);
+unsigned char CB_RX1_Get(void);
 
 
 #ifdef	__cplusplus

@@ -49,13 +49,17 @@ int main(void) {
     // Boucle Principale
     /****************************************************************************************************/
     while (1) {
-        int i;
-        for(i=0; i<CB_RX1_GetDataSize(); i++){
-            unsigned char c = CB_RX1_Get();
-            SendMessage(&c,1);
-        }
-       // SendMessage((unsigned char*) "Au revoir", 9);
-        __delay32(1000);
+        //unsigned char payload[] = {'B', 'o', 'n', 'j', 'o', 'u', 'r'};
+        //UartEncodeAndSendMessage(0x0080, 7, payload);
+        //        int i;
+        //        for(i=0; i<CB_RX1_GetDataSize(); i++){
+        //            unsigned char c = CB_RX1_Get();
+        //            SendMessage(&c,1);
+        //        }
+        // SendMessage((unsigned char*) "Au revoir", 9);
+
+        //__delay32(1000);
+        //__delay32(40000000);
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
@@ -110,6 +114,10 @@ int main(void) {
             } else {
                 LED_BLANCHE = 0;
             }
+            
+            unsigned char payload[] = {robotState.distanceTelemetreGauche, robotState.distanceTelemetreCentre, robotState.distanceTelemetreDroit};
+            UartEncodeAndSendMessage(0x0030, 3, payload);
+            
         }
         if ((robotState.vitesseGaucheCommandeCourante == 25) && (robotState.vitesseDroiteCommandeCourante == 25)) {
             LED_BLEUE = 1;
