@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Github/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/main.c</file>
+            <file>file:/C:/Github/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/ADC.c</file>
+            <file>file:/C:/Github/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/PWM.c</file>
+            <file>file:/C:/Github/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/PWM.h</file>
+        </group>
     </open-files>
 </project-private>

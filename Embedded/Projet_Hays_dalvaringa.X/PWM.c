@@ -6,8 +6,9 @@
 #include "timer.h"
 #include "main.h"
 
+
 #define PWMPER 40.0
-unsigned char acceleration = 1;
+unsigned int acceleration = 1;
 
 void InitPWM(void) {
     PTCON2bits.PCLKDIV = 0b000; //Divide by 1
@@ -29,7 +30,7 @@ void InitPWM(void) {
     PTCONbits.PTEN = 1;
 }
 
-/*
+
 void PWMSetSpeed(float vitesseEnPourcents, int moteur) {
    
     
@@ -65,7 +66,7 @@ void PWMSetSpeed(float vitesseEnPourcents, int moteur) {
         MOTEUR_DROIT_DUTY_CYCLE = Abs(robotState.vitesseDroiteCommandeCourante * PWMPER); 
         }
     }
-}*/
+}
 
 
 void PWMUpdateSpeed() {
@@ -111,6 +112,4 @@ void PWMSetSpeedConsigne(float vitesseEnPourcents, char moteur) {
     } else {
         robotState.vitesseDroiteConsigne = vitesseEnPourcents;
     }
-
-
 }

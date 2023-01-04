@@ -16,18 +16,18 @@
             <RowDefinition Height="100"/>            
         </Grid.RowDefinitions>
         <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0">
-            <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp"/>
+            <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" Background="#fffdf1"/>
         </GroupBox>
         <GroupBox Header="Réception" Grid.Column="1" Grid.Row="0">
-            <TextBox x:Name="textBoxReception"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" >
+            <TextBox x:Name="textBoxReception"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" Background="#fffdf1">
             </TextBox>
         </GroupBox>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
             <GroupBox Header="LEDS" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top">
                 <StackPanel HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="200" Orientation="Vertical">
-                    <CheckBox x:Name="Led0" Content="Led0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="Led1" Content="Led1" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
-                    <CheckBox x:Name="Led2" Content="Led2" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                    <CheckBox x:Name="Led0" Content="Led0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#fff2f1" BorderBrush="#fff2f1"/>
+                    <CheckBox x:Name="Led1" Content="Led1" HorizontalAlignment="Left"  VerticalAlignment="Top" Background="#f5fff1" BorderBrush="#f5fff1"/>
+                    <CheckBox x:Name="Led2" Content="Led2" HorizontalAlignment="Left"  VerticalAlignment="Top" Background="#f5fff1" BorderBrush="#f5fff1"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Télémètres IR" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="200">
@@ -38,8 +38,8 @@
                 <TextBox x:Name="textMoteurs"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True"/>
             </GroupBox>
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Margin="0,5" >
-                <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Margin="5"/>
-                <Button x:Name="buttonclear" Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonclear_Click" Margin="5"/>
+                <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Margin="5" />
+                <Button x:Name="buttonclear" Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonclear_Click" Margin="5" />
                 <Button x:Name="buttonTest" Content="Test" Grid.Column="1" HorizontalAlignment="Stretch" Width="100"  VerticalAlignment="Stretch" Click="buttonTest_Click" Margin="5" />
             </StackPanel>
         </StackPanel>

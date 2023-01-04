@@ -30,5 +30,6 @@
 
 void OperatingSystemLoop(void);
 void SetNextRobotStateInAutomaticMode();
+void SendStateSupervision();
 
 #endif	/* MAIN_H */

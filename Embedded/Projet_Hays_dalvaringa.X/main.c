@@ -36,6 +36,7 @@ int main(void) {
     InitIO();
     InitTimer23();
     InitTimer1();
+    InitTimer4();
     InitPWM();
     InitADC1();
     InitUART();
@@ -116,9 +117,7 @@ int main(void) {
             }
             
             unsigned char payload[] = {robotState.distanceTelemetreGauche, robotState.distanceTelemetreCentre, robotState.distanceTelemetreDroit};
-            UartEncodeAndSendMessage(0x0030, 3, payload);
-            
-            
+            UartEncodeAndSendMessage(0x0030, 3, payload);  
         }
         if ((robotState.vitesseGaucheCommandeCourante == 25) && (robotState.vitesseDroiteCommandeCourante == 25)) {
             LED_BLEUE = 1;
@@ -130,6 +129,8 @@ int main(void) {
 
 void OperatingSystemLoop(void) {
     switch (stateRobot) {
+//        unsigned char payload[] = {MOTEUR_GAUCHE, MOTEUR_DROIT};
+//        UartEncodeAndSendMessage(0x0040, 2, payload);
         case STATE_ATTENTE:
             timestamp = 0;
             PWMSetSpeedConsigne(0, MOTEUR_DROIT);
@@ -142,8 +143,8 @@ void OperatingSystemLoop(void) {
             break;
 
         case STATE_AVANCE:
-            PWMSetSpeedConsigne(25, MOTEUR_DROIT);
-            PWMSetSpeedConsigne(25, MOTEUR_GAUCHE);
+            PWMSetSpeedConsigne(20, MOTEUR_DROIT);
+            PWMSetSpeedConsigne(20, MOTEUR_GAUCHE);
             stateRobot = STATE_AVANCE_EN_COURS;
             break;
         case STATE_AVANCE_EN_COURS:
@@ -151,7 +152,7 @@ void OperatingSystemLoop(void) {
             break;
 
         case STATE_TOURNE_GAUCHE:
-            PWMSetSpeedConsigne(13, MOTEUR_DROIT);
+            PWMSetSpeedConsigne(15, MOTEUR_DROIT);
             PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_GAUCHE_EN_COURS;
             break;
@@ -161,7 +162,7 @@ void OperatingSystemLoop(void) {
 
         case STATE_TOURNE_DROITE:
             PWMSetSpeedConsigne(0, MOTEUR_DROIT);
-            PWMSetSpeedConsigne(13, MOTEUR_GAUCHE);
+            PWMSetSpeedConsigne(15, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_DROITE_EN_COURS;
             break;
         case STATE_TOURNE_DROITE_EN_COURS:
@@ -190,9 +191,17 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_ATTENTE;
             break;
     }
+    
 }
 
 unsigned char nextStateRobot = 0;
+
+void SendStateSupervision()
+{
+    unsigned long timeStampCourant = timestamp;
+    unsigned char payload[] = {stateRobot ,(unsigned char) (timeStampCourant>>24), (unsigned char) (timeStampCourant>>16), (unsigned char) (timeStampCourant>>8), (unsigned char) (timeStampCourant>>0)};
+    UartEncodeAndSendMessage(0x0050, 5, payload);
+}
 
 void SetNextRobotStateInAutomaticMode() {
     unsigned char positionObstacle = PAS_D_OBSTACLE;
@@ -264,5 +273,6 @@ void SetNextRobotStateInAutomaticMode() {
     //Si l'on n?est pas dans la transition de l?étape en cours
     if (nextStateRobot != stateRobot - 1) {
         stateRobot = nextStateRobot;
+        SendStateSupervision();
     }
 }
