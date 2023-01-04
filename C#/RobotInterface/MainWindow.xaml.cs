@@ -66,10 +66,10 @@ namespace RobotInterfaceNet
             }
         }
 
-        private void TextBoxReception_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        //private void TextBoxReception_TextChanged(object sender, TextChangedEventArgs e)
+        //{
 
-        }
+        //}
 
         bool toggle = false;
         private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
@@ -146,18 +146,53 @@ namespace RobotInterfaceNet
 
         private void buttonTest_Click(object sender, RoutedEventArgs e)
         {
-            string s = "Bonjour";
-
-                byte[] byteList;// = new byte[20];
-                byteList = Encoding.ASCII.GetBytes(s);
+            //string s = "Bonjour";
+            //byte[] byteList;// = new byte[20];
+            //byteList = Encoding.ASCII.GetBytes(s);
             /* for (int i = 0; i < 20; i++)
              {
                  //byteList[i] = (byte)(2 * i);  
 
              }*/
-            UartEncodeAndSendMessage(0x0080, byteList.Length, byteList);
-           
 
+            //processDecodeMessage(0x0080, byteList.Length, byteList);
+            byte[] telemetre = {0x34 ,0x3C, 0x80};
+            processDecodeMessage(0x0030, 3, telemetre);
+
+            byte[] moteur = { 0x34, 0x3C };
+            processDecodeMessage(0x0040, 2, moteur);
+
+            byte[] leds = { 0x00, 0x01 };
+            processDecodeMessage(0x0020, 2, leds);
+        }
+        void processDecodeMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
+        {
+            if(msgFunction == 0x0030)
+            {
+                telem.Text = "IR Gauche : " + msgPayload[0] + "cm\n" + "IR Centre : " + msgPayload[1] + "cm\n" + "IR Droit : " + msgPayload[2] + "cm";
+            }
+            if (msgFunction == 0x0040)
+            {
+                textMoteurs.Text = "Vitesse Gauche : " + msgPayload[0] + "%\n" + "Vitesse Droite : " + msgPayload[1] + "%\n";
+            }
+            if (msgFunction == 0x0020)
+            {
+                switch(msgPayload[0])
+                {
+                    case 0x00:
+                        if (msgPayload[1] == 1) { Led0.IsChecked = true; }
+                        else if (msgPayload[1] == 0) { Led0.IsChecked = false; }
+                        break;
+                    case 0x01:
+                        if (msgPayload[1] == 1) { Led1.IsChecked = true; }
+                        else if (msgPayload[1] == 0) { Led1.IsChecked = false; }
+                        break;
+                    case 0x10:
+                        if (msgPayload[1] == 1) { Led2.IsChecked = true; }
+                        else if (msgPayload[1] == 0) { Led2.IsChecked = false; }
+                        break;
+                }
+            }
         }
         byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
@@ -252,12 +287,13 @@ namespace RobotInterfaceNet
                 if (CalculateChecksum(msgDecodedFunction,msgDecodedPayloadLength, msgDecodedPayload) == c)
                     {
                         //Success, on a un message valide
-                        textBoxReception.Text+= " OK \n";
+                        //textBoxReception.Text+= " OK \n";
+                        processDecodeMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     }
-                    else
-                    {
-                        textBoxReception.Text += " Pas OK \n";
-                    }
+                    //else
+                    //{
+                    //    textBoxReception.Text += " Pas OK \n";
+                    //}
                     rcvState = StateReception.Waiting;
                     break;
                 default:
@@ -272,5 +308,11 @@ namespace RobotInterfaceNet
             DistanceTelemeter = 0x30,
             ConsigneVitesse = 0x40,
         }
+
+
+        //private void telem_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+
+        //}
     }
 }

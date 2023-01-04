@@ -66,14 +66,14 @@ int main(void) {
             ADCValue0 = result[0];
             ADCValue1 = result[1];
             ADCValue2 = result[2];
-            ADCValue1 = result[3];
-            ADCValue2 = result[4];
+            ADCValue3 = result[3];
+            ADCValue4 = result[4];
 
 
-            float volts = ((float) result [0])* 3.3 / 4096 * 3.2;
-            robotState.distanceTelemetreExDroit = 34 / volts - 5;
-            volts = ((float) result [1])* 3.3 / 4096 * 3.2;
+            float volts = ((float) result [1])* 3.3 / 4096 * 3.2;
             robotState.distanceTelemetreDroit = 34 / volts - 5;
+            volts = ((float) result [0])* 3.3 / 4096 * 3.2;
+            robotState.distanceTelemetreExDroit = 34 / volts - 5;
             volts = ((float) result [2])* 3.3 / 4096 * 3.2;
             robotState.distanceTelemetreCentre = 34 / volts - 5;
             volts = ((float) result [4])* 3.3 / 4096 * 3.2;
@@ -117,6 +117,7 @@ int main(void) {
             
             unsigned char payload[] = {robotState.distanceTelemetreGauche, robotState.distanceTelemetreCentre, robotState.distanceTelemetreDroit};
             UartEncodeAndSendMessage(0x0030, 3, payload);
+            
             
         }
         if ((robotState.vitesseGaucheCommandeCourante == 25) && (robotState.vitesseDroiteCommandeCourante == 25)) {
