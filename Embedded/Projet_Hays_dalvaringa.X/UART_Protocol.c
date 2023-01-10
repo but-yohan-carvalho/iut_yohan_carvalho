@@ -44,7 +44,7 @@ void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, unsigned ch
     SendMessage(mess, position+1);
 }
 
-/*
+
 void UartDecodeMessage(unsigned char c) {
     //Fonction prenant en entree un octet et servant a reconstituer les trames
     switch (rcvState) {
@@ -100,7 +100,7 @@ void UartDecodeMessage(unsigned char c) {
     }
 }
  
-void UartProcessDecodedMessage(int msgFunction, int msgPayloadLength, unsigned char* msgPayload) {
+/*void UartProcessDecodedMessage(int msgFunction, int msgPayloadLength, unsigned char* msgPayload) {
     //Fonction appelee apres le decodage pour executer l?action
     //correspondant au message recu
     if (msgFunction == 0x0030) {
@@ -134,9 +134,9 @@ void UartProcessDecodedMessage(int msgFunction, int msgPayloadLength, unsigned c
                 break;
         }
     }
-}
+}*/
 
-*/
+
 //*************************************************************************/
 //Fonctions correspondant aux messages
 //*************************************************************************/

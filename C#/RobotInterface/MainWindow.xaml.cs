@@ -156,14 +156,20 @@ namespace RobotInterfaceNet
              }*/
 
             //processDecodeMessage(0x0080, byteList.Length, byteList);
-            byte[] telemetre = {0x34 ,0x3C, 0x80};
-            processDecodeMessage(0x0030, 3, telemetre);
+            //byte[] telemetre = {0x34 ,0x3C, 0x80};
+            //processDecodeMessage(0x0030, 3, telemetre);
 
-            byte[] moteur = { 0x34, 0x3C };
-            processDecodeMessage(0x0040, 2, moteur);
+            //byte[] moteur = { 0x34, 0x3C };
+            //processDecodeMessage(0x0040, 2, moteur);
 
-            byte[] leds = { 0x00, 0x01 };
-            processDecodeMessage(0x0020, 2, leds);
+            //byte[] leds = { 0x00, 0x01 };
+            //processDecodeMessage(0x0020, 2, leds);
+
+            string s = "Bonjour";
+            byte[] byteList;
+            byteList = Encoding.ASCII.GetBytes(s);
+            UartEncodeAndSendMessage(0x0080, byteList.Length, byteList);
+
         }
         void processDecodeMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {

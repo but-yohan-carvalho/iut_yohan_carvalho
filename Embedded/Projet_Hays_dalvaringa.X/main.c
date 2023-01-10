@@ -52,15 +52,16 @@ int main(void) {
     while (1) {
         //unsigned char payload[] = {'B', 'o', 'n', 'j', 'o', 'u', 'r'};
         //UartEncodeAndSendMessage(0x0080, 7, payload);
-        //        int i;
-        //        for(i=0; i<CB_RX1_GetDataSize(); i++){
-        //            unsigned char c = CB_RX1_Get();
-        //            SendMessage(&c,1);
-        //        }
+                int i;
+                for(i=0; i<CB_RX1_GetDataSize(); i++){
+                    unsigned char c = CB_RX1_Get();
+                    UartDecodeMessage(c);
+                }
         // SendMessage((unsigned char*) "Au revoir", 9);
 
         //__delay32(1000);
         //__delay32(40000000);
+        
         if (ADCIsConversionFinished()) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
@@ -203,6 +204,7 @@ void SendStateSupervision()
     UartEncodeAndSendMessage(0x0050, 5, payload);
 }
 
+/*
 void SetNextRobotStateInAutomaticMode() {
     unsigned char positionObstacle = PAS_D_OBSTACLE;
 
@@ -271,6 +273,44 @@ void SetNextRobotStateInAutomaticMode() {
         }
     }
     //Si l'on n?est pas dans la transition de l?étape en cours
+    if (nextStateRobot != stateRobot - 1) {
+        stateRobot = nextStateRobot;
+        SendStateSupervision();
+    }
+}
+*/
+
+void SetNextRobotStateInAutomaticMode(void) {
+    unsigned char positionObstacle = PAS_D_OBSTACLE;
+
+    //Détermination de la position des obstacles en fonction des télémètres
+    if (robotState.distanceTelemetreDroit > 30 &&
+            robotState.distanceTelemetreExDroit > 20 &&
+            robotState.distanceTelemetreCentre > 30 &&
+            robotState.distanceTelemetreExGauche > 20 &&
+            robotState.distanceTelemetreGauche > 30) //pas d?obstacle
+        positionObstacle = PAS_D_OBSTACLE;
+    else if (robotState.distanceTelemetreCentre <= 30)
+        positionObstacle = OBSTACLE_EN_FACE;
+    else if (robotState.distanceTelemetreDroit < 30 ||
+            robotState.distanceTelemetreExDroit < 20)
+        positionObstacle = OBSTACLE_A_DROITE;
+    else if (robotState.distanceTelemetreExGauche < 30 ||
+            robotState.distanceTelemetreGauche < 20)
+        positionObstacle = OBSTACLE_A_GAUCHE;
+
+
+    //Détermination de l?état à venir du robot
+    if (positionObstacle == PAS_D_OBSTACLE)
+        nextStateRobot = STATE_AVANCE;
+    else if (positionObstacle == OBSTACLE_A_DROITE)
+        nextStateRobot = STATE_TOURNE_GAUCHE;
+    else if (positionObstacle == OBSTACLE_A_GAUCHE)
+        nextStateRobot = STATE_TOURNE_DROITE;
+    else if (positionObstacle == OBSTACLE_EN_FACE)
+        nextStateRobot = STATE_TOURNE_SUR_PLACE_DROITE;
+
+    //Si l?on n?est pas dans la transition de l?étape en cours
     if (nextStateRobot != stateRobot - 1) {
         stateRobot = nextStateRobot;
         SendStateSupervision();
