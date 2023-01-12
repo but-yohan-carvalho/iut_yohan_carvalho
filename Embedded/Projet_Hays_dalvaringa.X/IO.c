@@ -60,7 +60,7 @@ void InitIO()
 
     _TRISG9 = 1;
     
-    _TRISC0= 1;
+    _TRISC0 = 1;
     
     _TRISC11 = 1;
     

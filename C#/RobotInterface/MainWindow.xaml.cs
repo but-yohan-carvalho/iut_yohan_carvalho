@@ -340,6 +340,5 @@ namespace RobotInterfaceNet
             STATE_RECULE = 14,
             STATE_RECULE_EN_COURS = 15
         }
-
     }
 }
