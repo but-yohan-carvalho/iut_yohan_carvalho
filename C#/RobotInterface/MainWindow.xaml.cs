@@ -168,7 +168,8 @@ namespace RobotInterfaceNet
             string s = "Bonjour";
             byte[] byteList;
             byteList = Encoding.ASCII.GetBytes(s);
-            UartEncodeAndSendMessage(0x0080, byteList.Length, byteList);
+            UartEncodeAndSendMessage(0x0080, 7, byteList);
+            
 
         }
         void processDecodeMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)

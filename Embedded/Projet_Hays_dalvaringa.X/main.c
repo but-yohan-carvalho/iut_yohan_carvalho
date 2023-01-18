@@ -313,6 +313,6 @@ void SetNextRobotStateInAutomaticMode(void) {
     //Si l?on n?est pas dans la transition de l?étape en cours
     if (nextStateRobot != stateRobot - 1) {
         stateRobot = nextStateRobot;
-        SendStateSupervision();
+        //SendStateSupervision();
     }
 }

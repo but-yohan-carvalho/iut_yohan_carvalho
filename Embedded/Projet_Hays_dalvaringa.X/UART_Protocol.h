@@ -10,7 +10,10 @@
 
 unsigned char UartCalculateChecksum(int msgFunction, int msgPayloadLength, unsigned char* msgPayload);
 void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, unsigned char* msgPayload);
-void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* payload);
+void UartDecodeMessage(unsigned char c);
+void UartProcessDecodedMessage(unsigned char msgFunction, unsigned char msgPayloadLength, unsigned char msgPayload[]);
+void SetRobotState(unsigned char payload);
+void SetRobotAutoControlState(unsigned char state);
 
 #define Waiting 0
 #define FunctionMSB 1
@@ -19,6 +22,10 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
 #define PayloadLengthLSB 4
 #define Payload 5
 #define CheckSum 6
+
+
+#define SET_ROBOT_STATE 0x0051
+#define SET_ROBOT_MANUAL_CONTROL 0x0052
 
 
 
