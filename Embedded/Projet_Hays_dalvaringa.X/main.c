@@ -16,6 +16,7 @@
 #include "CB_RX1.h"
 #include "UART.h"
 #include "UART_Protocol.h"
+#include "QEI.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -40,6 +41,8 @@ int main(void) {
     InitPWM();
     InitADC1();
     InitUART();
+    InitQEI1();
+    InitQEI2();
 
 
     LED_BLANCHE = 1;

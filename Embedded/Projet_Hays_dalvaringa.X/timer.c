@@ -5,9 +5,11 @@
 #include "ADC.h"
 #include "main.h"
 #include "UART.h"
+#include "QEI.h"
 
 uint16_t tour = 0;
 unsigned long timestamp = 0;
+uint32_t comptEch = 0;
 
 //Initialisation d?un timer 32 bits
 
@@ -30,23 +32,24 @@ void InitTimer23(void) {
 
 //Interruption du timer 32 bits sur 2-3
 //int toggle=0;
+
 void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
-//    LED_ORANGE = !LED_ORANGE;
-//        
-//    if (toggle==0)
-//    {
-//        PWMSetSpeed(37, MOTEUR_DROIT);
-//        PWMSetSpeed(-37, MOTEUR_GAUCHE);
-//        toggle=1;
-//    }
-//    else if (toggle==1)
-//    {
-//       PWMSetSpeed(37, MOTEUR_GAUCHE);
-//       PWMSetSpeed(-37, MOTEUR_DROIT);
-//       toggle=0;
-//    }
-    
+    //    LED_ORANGE = !LED_ORANGE;
+    //        
+    //    if (toggle==0)
+    //    {
+    //        PWMSetSpeed(37, MOTEUR_DROIT);
+    //        PWMSetSpeed(-37, MOTEUR_GAUCHE);
+    //        toggle=1;
+    //    }
+    //    else if (toggle==1)
+    //    {
+    //       PWMSetSpeed(37, MOTEUR_GAUCHE);
+    //       PWMSetSpeed(-37, MOTEUR_DROIT);
+    //       toggle=0;
+    //    }
+
 }
 
 int toggle = 0;
@@ -69,12 +72,12 @@ void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
     }
      
 }
-*/
+ */
 //Initialisation d?un timer 16 bits
 
 void InitTimer1(void) {
     //Timer1 pour horodater les mesures (1ms)
-    SetFreqTimer1(160.5);
+    SetFreqTimer1(250);
     T1CONbits.TON = 0; // Disable Timer
     //T1CONbits.TCKPS = 0b10; //Prescaler
     //11 = 1:256 prescale value
@@ -87,16 +90,24 @@ void InitTimer1(void) {
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
     T1CONbits.TON = 1; // Enable Timer
-    
+
 }
 
 //Interruption du timer 1
 
 void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
+
     //LED_BLEUE = !LED_BLEUE;
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
+    QEIUpdateData();
+    //SendPositionData();
+    comptEch++;
+    if (comptEch %25 == 0) {
+        SendPositionData();
+    }
+
 
 
 }
@@ -123,7 +134,6 @@ void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     OperatingSystemLoop();
 
 }
-
 
 void SetFreqTimer4(float freq) {
     T4CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value

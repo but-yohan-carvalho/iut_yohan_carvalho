@@ -17,6 +17,17 @@ typedef struct robotStateBITS {
             float distanceTelemetreGauche;
             float distanceTelemetreCentre;
             float result;
+            
+            double vitesseDroitFromOdometry;
+            double vitesseGaucheFromOdometry;
+            double vitesseLineaireFromOdometry;
+            double vitesseAngulaireFromOdometry;
+            double xPosFromOdometry;
+            double xPosFromOdometry_1;
+            double yPosFromOdometry;
+            double yPosFromOdometry_1;
+            double angleRadianFromOdometry_1;
+            double angleRadianFromOdometry;
         }
         ;
     }
