@@ -173,45 +173,87 @@ namespace RobotInterfaceNet
             
 
         }
+        public enum msgFonction
+        {
+            transmissionText = 0x80,
+            ReglageLed = 0x20,
+            DistanceTelemeter = 0x30,
+            ConsigneVitesse = 0x40,
+            EtapeEnCours = 0x50,
+
+        }
         void processDecodeMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
-            if(msgFunction == 0x0030)
+            switch (msgFunction)
             {
-                telem.Text = "IR Gauche : " + msgPayload[0] + "cm\n" + "IR Centre : " + msgPayload[1] + "cm\n" + "IR Droit : " + msgPayload[2] + "cm";
-            }
-            if (msgFunction == 0x0040)
-            {
-                textMoteurs.Text = "Vitesse Gauche : " + msgPayload[0] + "%\n" + "Vitesse Droite : " + msgPayload[1] + "%\n";
-            }
-            if (msgFunction == 0x0020)
-            {
-                switch(msgPayload[0])
-                {
-                    case 0x00:
-                        if (msgPayload[1] == 1) { Led0.IsChecked = true; }
-                        else if (msgPayload[1] == 0) { Led0.IsChecked = false; }
-                        break;
-                    case 0x01:
-                        if (msgPayload[1] == 1) { Led1.IsChecked = true; }
-                        else if (msgPayload[1] == 0) { Led1.IsChecked = false; }
-                        break;
-                    case 0x10:
-                        if (msgPayload[1] == 1) { Led2.IsChecked = true; }
-                        else if (msgPayload[1] == 0) { Led2.IsChecked = false; }
-                        break;
-                }
-            }
-            if (msgFunction == 0x0050)
-            {
-                int instant = (((int)msgPayload[1]) << 24) + 
-                    (((int)msgPayload[2]) << 16) + 
-                    (((int)msgPayload[3]) << 8) + 
+                case (int) msgFonction.transmissionText:
+                    robot.receivedText += Encoding.UTF8.GetString(msgDecodedPayload, 0, msgDecodedPayloadLength);
+                    break;
+
+                case (int) msgFonction.ReglageLed:
+                    switch (msgPayload[0])
+                    {
+                        case 0:
+                            if (msgPayload[1] == 0x01)
+                            {
+                                Led0.IsChecked = true;
+                            }
+                            else
+                            {
+                                Led0.IsChecked = false;
+                            }
+                            break;
+
+                        case 1:
+                            if (msgPayload[1] == 0x01)
+                            {
+                                Led1.IsChecked = true;
+                            }
+                            else
+                            {
+                                Led1.IsChecked = false;
+                            }
+                            break;
+
+                        case 2:
+                            if (msgPayload[1] == 0x01)
+                            {
+                                Led2.IsChecked = true;
+                            }
+                            else
+                            {
+                                Led2.IsChecked = false;
+                            }
+                            break;
+                    }
+                    break;
+
+                case (int)msgFonction.DistanceTelemeter:
+                    telem.Text = "IR Gauche : " + 
+                    msgPayload[0] + "cm\n" + "IR Centre : " + 
+                    msgPayload[1] + "cm\n" + "IR Droit : " + 
+                    msgPayload[2] + "cm";
+                    break;
+
+                case (int)msgFonction.ConsigneVitesse:
+                    textMoteurs.Text = "Vitesse Gauche : " + 
+                        msgPayload[0] + "%\n" + "Vitesse Droite : " + 
+                        msgPayload[1] + "%\n";
+                    break;
+
+                case (int)msgFonction.EtapeEnCours:
+                    int instant = (((int)msgPayload[1]) << 24) +
+                    (((int)msgPayload[2]) << 16) +
+                    (((int)msgPayload[3]) << 8) +
                     ((int)msgPayload[4]);
-                    textBoxReception.Text += "\nRobot␣State␣:␣" + 
-                    ((StateRobot)(msgPayload[0])).ToString() + "␣-␣" + 
+                    textBoxReception.Text += "\nRobot␣State␣:␣" +
+                    ((StateRobot)(msgPayload[0])).ToString() + "␣-␣" +
                     instant.ToString() + "␣ms";
+                    break;
             }
+            
         }
+       
         byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
             byte Checksum = 0;
@@ -319,15 +361,7 @@ namespace RobotInterfaceNet
                     break;
             }
         }
-        public enum msgFonction
-        {
-            transmissionText = 0x80,
-            ReglageLed = 0x20,
-            DistanceTelemeter = 0x30,
-            ConsigneVitesse = 0x40,
-            EtapeEnCours = 0x50,
-            
-        }
+       
         public enum StateRobot
         {
             STATE_ATTENTE = 0,

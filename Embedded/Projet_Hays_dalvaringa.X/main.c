@@ -60,6 +60,9 @@ int main(void) {
                     unsigned char c = CB_RX1_Get();
                     UartDecodeMessage(c);
                 }
+                
+//        unsigned char payload[] = {};
+//        UartEncodeAndSendMessage(0x0020, 2, payload)
         // SendMessage((unsigned char*) "Au revoir", 9);
 
         //__delay32(1000);
