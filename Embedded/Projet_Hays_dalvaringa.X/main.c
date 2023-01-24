@@ -196,6 +196,7 @@ void OperatingSystemLoop(void) {
             break;
     }
     
+    
 }
 
 unsigned char nextStateRobot = 0;
@@ -203,8 +204,12 @@ unsigned char nextStateRobot = 0;
 void SendStateSupervision()
 {
     unsigned long timeStampCourant = timestamp;
-    unsigned char payload[] = {stateRobot ,(unsigned char) (timeStampCourant>>24), (unsigned char) (timeStampCourant>>16), (unsigned char) (timeStampCourant>>8), (unsigned char) (timeStampCourant>>0)};
-    UartEncodeAndSendMessage(0x0050, 5, payload);
+    unsigned char payload[] = {stateRobot ,
+    (unsigned char) (timeStampCourant>>24),
+    (unsigned char) (timeStampCourant>>16),
+    (unsigned char) (timeStampCourant>>8),
+    (unsigned char) (timeStampCourant>>0)};
+    //UartEncodeAndSendMessage(0x0050, 5, payload);
 }
 
 /*

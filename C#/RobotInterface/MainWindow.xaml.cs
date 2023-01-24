@@ -29,7 +29,7 @@ namespace RobotInterfaceNet
         public MainWindow()
         {
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM3", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM6", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -169,6 +169,7 @@ namespace RobotInterfaceNet
             byte[] byteList;
             byteList = Encoding.ASCII.GetBytes(s);
             UartEncodeAndSendMessage(0x0080, 7, byteList);
+            //textBoxReception.Text = s;
             
 
         }
@@ -202,8 +203,13 @@ namespace RobotInterfaceNet
             }
             if (msgFunction == 0x0050)
             {
-                int instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16) + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
-                textBoxReception.Text += "\nRobot␣State␣:␣" + ((StateRobot)(msgPayload[0])).ToString() + "␣-␣" + instant.ToString() + "␣ms";
+                int instant = (((int)msgPayload[1]) << 24) + 
+                    (((int)msgPayload[2]) << 16) + 
+                    (((int)msgPayload[3]) << 8) + 
+                    ((int)msgPayload[4]);
+                    textBoxReception.Text += "\nRobot␣State␣:␣" + 
+                    ((StateRobot)(msgPayload[0])).ToString() + "␣-␣" + 
+                    instant.ToString() + "␣ms";
             }
         }
         byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte[] msgPayload)

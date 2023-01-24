@@ -8,7 +8,7 @@
 #include "Utilities.h"
 #include "UART_Protocol.h"
 
-
+#define POSITION_DATA 0x0061    
 #define DISTROUES 281.2
 
 void InitQEI1() {
@@ -90,7 +90,7 @@ void QEIUpdateData() {
         robotState.angleRadianFromOdometry += 2 * PI;
 }
 
-#define POSITION_DATA 0x0061
+
 
 void SendPositionData() {
     unsigned char positionPayload[24];
