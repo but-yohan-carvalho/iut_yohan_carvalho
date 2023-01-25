@@ -15,18 +15,18 @@
             <RowDefinition/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0" Margin="0,0,0,168">
+        <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0" Margin="0,0,0,204">
             <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" Background="#fffdf1"/>
         </GroupBox>
 
-        <GroupBox Header="Position" VerticalAlignment="Bottom" Height="163">
+        <GroupBox Header="Position" VerticalAlignment="Bottom" Height="199">
             <StackPanel Margin="0">
-                <Label x:Name="tempsCourant" Height="23"/>
-                <Label x:Name="posX" Height="23"/>
-                <Label x:Name="posY" Height="23"/>
-                <Label x:Name="angRad" Height="23"/>
-                <Label x:Name="vitLin" Height="23"/>
-                <Label x:Name="vitAng" Height="23"/>
+                <Label x:Name="tempsCourant" Height="27"/>
+                <Label x:Name="posX" Height="27"/>
+                <Label x:Name="posY" Height="27"/>
+                <Label x:Name="angRad" Height="27"/>
+                <Label x:Name="vitLin" Height="27"/>
+                <Label x:Name="vitAng" Height="27"/>
             </StackPanel>
         </GroupBox>
 
