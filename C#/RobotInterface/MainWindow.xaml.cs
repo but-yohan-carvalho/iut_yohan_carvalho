@@ -363,15 +363,15 @@ namespace RobotInterfaceNet
                     msgDecodedPayloadIndex = 0;
                     rcvState = StateReception.Payload;
                 break;
-                case StateReception.Payload:     
+                case StateReception.Payload:
+                    msgDecodedPayload[msgDecodedPayloadIndex] = c;
+                    msgDecodedPayloadIndex++;
                     if (msgDecodedPayloadIndex >= msgDecodedPayloadLength)
                     {
                         rcvState = StateReception.CheckSum;
                     }
-                    msgDecodedPayload[msgDecodedPayloadIndex] = c;
-                    msgDecodedPayloadIndex++;
-
-                    break;
+                        
+                break;
                 case StateReception.CheckSum:
 
                 if (CalculateChecksum(msgDecodedFunction,msgDecodedPayloadLength, msgDecodedPayload) == c)
