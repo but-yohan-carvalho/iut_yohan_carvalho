@@ -12,12 +12,24 @@ namespace RobotInterfaceNet
         public float distanceTelemetreDroit;
         public float distanceTelemetreGauche;
         public float distanceTelemetreCentre;
+        public bool led1;
+        public bool led2;
+        public bool led3;
+        public int consigneGauche;
+        public int consigneDroite;
+        public int timestamp;
+        public float positionX;
+        public float positionY;
+        public float angleRad;
+        public float vitesseAng;
+        public float vitesseLin;
+        public Queue<byte> byteListReceived = new Queue<byte>();
 
         public Robot()
         { 
         
         }
             
-        public Queue<byte> byteListReceived = new Queue<byte>();
+        
     }
 }

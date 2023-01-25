@@ -13,11 +13,26 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="100"/>            
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0">
+        <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0" Margin="0,0,0,168">
             <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" Background="#fffdf1"/>
         </GroupBox>
+
+        <GroupBox Header="Position" VerticalAlignment="Bottom" Height="163">
+            <StackPanel Margin="0">
+                <Label x:Name="tempsCourant" Height="23"/>
+                <Label x:Name="posX" Height="23"/>
+                <Label x:Name="posY" Height="23"/>
+                <Label x:Name="angRad" Height="23"/>
+                <Label x:Name="vitLin" Height="23"/>
+                <Label x:Name="vitAng" Height="23"/>
+            </StackPanel>
+        </GroupBox>
+
+
+
+
         <GroupBox Header="Réception" Grid.Column="1" Grid.Row="0">
             <TextBox x:Name="textBoxReception" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" Background="#fffdf1">
             </TextBox>
@@ -30,12 +45,27 @@
                     <CheckBox x:Name="Led2" Content="Led2" HorizontalAlignment="Left"  VerticalAlignment="Top" Background="#f5fff1" BorderBrush="#f5fff1"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Télémètres IR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="200">
-                <TextBox x:Name="telem"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True"/>
+            <GroupBox  Header="Télémètres IR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="200">
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0">
+                    <Label x:Name="telemG"/>
+                    <Label x:Name="telemC"/>
+                    <Label x:Name="telemD"/>
+
+                </StackPanel>
+
+
+
 
             </GroupBox>
+
+
             <GroupBox Header="Moteurs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="193">
-                <TextBox x:Name="textMoteurs"  TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True"/>
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Label x:Name="VitesseG"/>
+                    <Label x:Name="VitesseD"/>
+                </StackPanel>
+
+
             </GroupBox>
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" Margin="0,5" >
                 <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Margin="5" />
@@ -43,5 +73,6 @@
                 <Button x:Name="buttonTest" Content="Test" Grid.Column="1" HorizontalAlignment="Stretch" Width="100"  VerticalAlignment="Stretch" Click="buttonTest_Click" Margin="5" />
             </StackPanel>
         </StackPanel>
+        
     </Grid>
 </Window>

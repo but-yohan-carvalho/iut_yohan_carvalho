@@ -136,8 +136,8 @@ int main(void) {
 
 void OperatingSystemLoop(void) {
     switch (stateRobot) {
-//        unsigned char payload[] = {MOTEUR_GAUCHE, MOTEUR_DROIT};
-//        UartEncodeAndSendMessage(0x0040, 2, payload);
+    //    unsigned char payload[] = {MOTEUR_GAUCHE, MOTEUR_DROIT};
+    //    UartEncodeAndSendMessage(0x0040, 2, payload);
         case STATE_ATTENTE:
             timestamp = 0;
             PWMSetSpeedConsigne(0, MOTEUR_DROIT);

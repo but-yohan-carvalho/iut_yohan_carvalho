@@ -29,7 +29,7 @@ namespace RobotInterfaceNet
         public MainWindow()
         {
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM6", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM11", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -180,6 +180,7 @@ namespace RobotInterfaceNet
             DistanceTelemeter = 0x30,
             ConsigneVitesse = 0x40,
             EtapeEnCours = 0x50,
+            position = 0x61,
 
         }
         void processDecodeMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
@@ -229,16 +230,26 @@ namespace RobotInterfaceNet
                     break;
 
                 case (int)msgFonction.DistanceTelemeter:
-                    telem.Text = "IR Gauche : " + 
-                    msgPayload[0] + "cm\n" + "IR Centre : " + 
-                    msgPayload[1] + "cm\n" + "IR Droit : " + 
-                    msgPayload[2] + "cm";
+                    robot.distanceTelemetreGauche = msgPayload[0];
+                    robot.distanceTelemetreCentre = msgPayload[1];                 
+                    robot.distanceTelemetreDroit = msgPayload[2];
+
+                    string gauche = robot.distanceTelemetreGauche.ToString();
+                    string centre = robot.distanceTelemetreCentre.ToString();
+                    string droite = robot.distanceTelemetreDroit.ToString();
+
+                    telemG.Content = "IR Gauche : " + gauche + " cm";
+                    telemC.Content = "IR Centre : " + centre + " cm";
+                    telemD.Content = "IR Droit : " + droite + " cm";                   
                     break;
 
                 case (int)msgFonction.ConsigneVitesse:
-                    textMoteurs.Text = "Vitesse Gauche : " + 
-                        msgPayload[0] + "%\n" + "Vitesse Droite : " + 
-                        msgPayload[1] + "%\n";
+                    robot.consigneGauche = msgPayload[0];
+                    robot.consigneDroite = msgPayload[1];
+
+                    VitesseG.Content = "Vitesse Gauche : " + robot.consigneGauche + "%";
+                    VitesseD.Content = "Vitesse Droite : " + robot.consigneDroite + "%";
+                       
                     break;
 
                 case (int)msgFonction.EtapeEnCours:
@@ -249,6 +260,25 @@ namespace RobotInterfaceNet
                     textBoxReception.Text += "\nRobot␣State␣:␣" +
                     ((StateRobot)(msgPayload[0])).ToString() + "␣-␣" +
                     instant.ToString() + "␣ms";
+                    break;
+
+                case (int)msgFonction.position:
+                    robot.timestamp = (((int)msgPayload[0]) << 24) + (((int)msgPayload[1]) << 16)
+                    + (((int)msgPayload[2]) << 8) + ((int)msgPayload[3]);
+
+                    robot.positionX = BitConverter.ToSingle(msgPayload, 4);
+                    robot.positionY = BitConverter.ToSingle(msgPayload, 8);
+                    robot.angleRad = BitConverter.ToSingle(msgPayload, 12);
+                    robot.vitesseLin = BitConverter.ToSingle(msgPayload, 16);
+                    robot.vitesseAng = BitConverter.ToSingle(msgPayload, 20);
+
+                    tempsCourant.Content = "Temps : " + robot.timestamp;
+                    posX.Content = "Position X : " + robot.positionX;
+                    posY.Content = "Position Y : " + robot.positionY;
+                    angRad.Content = "Angle en radian : " + robot.angleRad;
+                    vitLin.Content = "Vitesse linéaire : " + robot.vitesseLin;
+                    vitAng.Content = "Vitesse angulaire : " + robot.vitesseAng;
+
                     break;
             }
             
@@ -333,15 +363,15 @@ namespace RobotInterfaceNet
                     msgDecodedPayloadIndex = 0;
                     rcvState = StateReception.Payload;
                 break;
-                case StateReception.Payload:
-                    msgDecodedPayload[msgDecodedPayloadIndex] = c;
-                    msgDecodedPayloadIndex++;
+                case StateReception.Payload:     
                     if (msgDecodedPayloadIndex >= msgDecodedPayloadLength)
                     {
                         rcvState = StateReception.CheckSum;
                     }
-                        
-                break;
+                    msgDecodedPayload[msgDecodedPayloadIndex] = c;
+                    msgDecodedPayloadIndex++;
+
+                    break;
                 case StateReception.CheckSum:
 
                 if (CalculateChecksum(msgDecodedFunction,msgDecodedPayloadLength, msgDecodedPayload) == c)
