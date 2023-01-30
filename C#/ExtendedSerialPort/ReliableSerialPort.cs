@@ -38,7 +38,7 @@ namespace ExtendedSerialPort
             }, null)); kickoffRead();
         }
 
-        public event EventHandler<DataReceivedArgs> DataReceived;
+        public new event EventHandler<DataReceivedArgs> DataReceived;
         public virtual void OnDataReceived(byte[] data)
         {
             var handler = DataReceived;

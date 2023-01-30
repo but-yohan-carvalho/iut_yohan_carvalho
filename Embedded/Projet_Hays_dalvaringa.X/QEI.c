@@ -10,6 +10,7 @@
 
 #define POSITION_DATA 0x0061    
 #define DISTROUES 281.2
+#define FREQ_ECH_QEI 250
 
 void InitQEI1() {
     QEI1IOCbits.SWPAB = 1; //QEAx and QEBx are swapped
@@ -32,8 +33,6 @@ double QeiGauchePosition;
 double delta_d;
 double delta_g;
 double delta_theta;
-//double dx;
-double FREQ_ECH_QEI;
 double theta;
 
 void QEIUpdateData() {
@@ -81,8 +80,8 @@ void QEIUpdateData() {
 
 
     //Calcul des positions dans le referentiel du terrain
-    robotState.xPosFromOdometry += ((robotState.vitesseDroitFromOdometry + robotState.vitesseGaucheFromOdometry) / DISTROUES * FREQ_ECH_QEI) * cos(theta);
-    robotState.yPosFromOdometry += ((robotState.vitesseDroitFromOdometry - robotState.vitesseGaucheFromOdometry) / DISTROUES * FREQ_ECH_QEI) * sin(theta);
+    robotState.xPosFromOdometry = robotState.xPosFromOdometry_1 + robotState.vitesseLineaireFromOdometry / FREQ_ECH_QEI * cos(robotState.angleRadianFromOdometry);
+    robotState.yPosFromOdometry = robotState.yPosFromOdometry_1 + robotState.vitesseLineaireFromOdometry / FREQ_ECH_QEI * sin(robotState.angleRadianFromOdometry);
     robotState.angleRadianFromOdometry += delta_theta;
     if (robotState.angleRadianFromOdometry > PI)
         robotState.angleRadianFromOdometry -= 2 * PI;
@@ -102,5 +101,3 @@ void SendPositionData() {
     getBytesFromFloat(positionPayload, 20, (float) (robotState.vitesseAngulaireFromOdometry));
     UartEncodeAndSendMessage(POSITION_DATA, 24, positionPayload);
 }
-
-

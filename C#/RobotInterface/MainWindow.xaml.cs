@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Ports;
 using System.Windows.Threading;
+using SciChart.Charting.Visuals;
 
 namespace RobotInterfaceNet
 {
@@ -28,6 +29,8 @@ namespace RobotInterfaceNet
         ReliableSerialPort serialPort1;
         public MainWindow()
         {
+            // Set this code once in App.xaml.cs or application startup
+            SciChartSurface.SetRuntimeLicenseKey("v1q9N0ZRgIzj1ebP4riiz/JWED4s1OkznHZBV5wW8Fv5kBlyo+UaxAlOttFNldGfu7yXJSsa7Jb6i9wafTefd2NQC4bCrpYo611tmhju/mJJnJFpbJ0NurEv42jlwADPuF8w2faKMUYO5hCc6bEbI0aj34uP0XjXYHNQ4ZgVCgCuzmSW9LKHcr5lVmwkRXf5xpQDm/6J62WcC2nWRhXwe9gPSe+ewRqPifnSK5FhgmKkf/v9cVIlLQYuAK3x840/+ygJKmBvyc+05j/qQSNxPPcGLbKV1Pdinm00KBMjVKCGkA6FIAj/QOAjCLtLk3+7oV0i3GLKjqELR167YeXJZE8z8XZRoXRXaEh4RL4C/DFbpg7mTMQ1hDDiNx4hA/zisuBtMzDgMkaQ9tSn3IghsHvCnuA90lgSZh/gpDp6ZPO6lNqqCrBas/5fTvhMvYgKCg27lxk6qVPN/6v3SS31sAeEyc0U8Erj+MgGBvpwFr7vHbaASaVKtlRQWNChiU6QqA==");
             InitializeComponent();
             serialPort1 = new ReliableSerialPort("COM11", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
@@ -37,6 +40,10 @@ namespace RobotInterfaceNet
             timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
             timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
+            oscilloSpeed.AddOrUpdateLine(1, 200, "Ligne1");
+            oscilloSpeed.ChangeLineColor(1, Color.FromRgb(255,0,100));
+            oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
+
 
         }
 
@@ -264,7 +271,7 @@ namespace RobotInterfaceNet
 
                 case (int)msgFonction.position:
                     robot.timestamp = (((int)msgPayload[0]) << 24) + (((int)msgPayload[1]) << 16)
-                    + (((int)msgPayload[2]) << 8) + ((int)msgPayload[3]);
+                    + (((int)msgPayload[2]) << 8) + ((int)msgPayload[3] << 0);
 
                     robot.positionX = BitConverter.ToSingle(msgPayload, 4);
                     robot.positionY = BitConverter.ToSingle(msgPayload, 8);

@@ -16,7 +16,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,7 +35,39 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SciChart.Charting, Version=6.6.0.26505, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
+      <HintPath>packages\SciChart.6.6.0.26505\lib\net452\SciChart.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="SciChart.Core, Version=6.6.0.26505, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
+      <HintPath>packages\SciChart.6.6.0.26505\lib\net452\SciChart.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SciChart.Data, Version=6.6.0.26505, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
+      <HintPath>packages\SciChart.6.6.0.26505\lib\net452\SciChart.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="SciChart.Drawing, Version=6.6.0.26505, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
+      <HintPath>packages\SciChart.6.6.0.26505\lib\net452\SciChart.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -87,6 +120,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -99,6 +133,18 @@
     <ProjectReference Include="..\ExtendedSerialPort\ExtendedSerialPort.csproj">
       <Project>{21ac599e-e3d5-4181-aa0f-7c2e00cca016}</Project>
       <Name>ExtendedSerialPort</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{8e7d0da4-9a13-4b18-a90e-0243bbcce40a}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfAsservissementDisplay\WpfAsservissementDisplay.csproj">
+      <Project>{f0a887e9-d0a2-47e3-994a-94a0dcae8d4f}</Project>
+      <Name>WpfAsservissementDisplay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfOscilloscope\WpfOscilloscopeControl.csproj">
+      <Project>{88baa407-3fea-4f4b-bb41-5309ce48884e}</Project>
+      <Name>WpfOscilloscopeControl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

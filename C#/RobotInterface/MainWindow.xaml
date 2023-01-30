@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RobotInterfaceNet"
+        xmlns:local="clr-namespace:RobotInterfaceNet"   
+        xmlns:osc="clr-namespace:WpfOscilloscopeControl;assembly=WpfOscilloscopeControl"        
+        xmlns:AsservDisplay="clr-namespace:WpfAsservissementDisplay;assembly=WpfAsservissementDisplay"
         mc:Ignorable="d"
         Title="MainWindow" Height="434" Width="800">
     <Grid>
@@ -15,11 +17,11 @@
             <RowDefinition/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0" Margin="0,0,0,168">
+        <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0" Margin="0,0,0,218">
             <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" Background="#fffdf1"/>
         </GroupBox>
 
-        <GroupBox Header="Position" VerticalAlignment="Bottom" Height="163">
+        <GroupBox Header="Position" Height="213" VerticalAlignment="Bottom" Margin="0,0,217,0">
             <StackPanel Margin="0">
                 <Label x:Name="tempsCourant" Height="23"/>
                 <Label x:Name="posX" Height="23"/>
@@ -30,11 +32,8 @@
             </StackPanel>
         </GroupBox>
 
-
-
-
-        <GroupBox Header="Réception" Grid.Column="1" Grid.Row="0">
-            <TextBox x:Name="textBoxReception" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" Background="#fffdf1">
+        <GroupBox Header="Réception" Grid.Column="1" Grid.Row="0" Margin="0,0,0,218">
+            <TextBox x:Name="textBoxReception" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" IsReadOnly="True" Background="#fffdf1" RenderTransformOrigin="0,0">
             </TextBox>
         </GroupBox>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
@@ -47,32 +46,28 @@
             </GroupBox>
             <GroupBox  Header="Télémètres IR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="200">
                 <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0">
-                    <Label x:Name="telemG"/>
-                    <Label x:Name="telemC"/>
-                    <Label x:Name="telemD"/>
-
+                    <Label x:Name="telemG" Height="25"/>
+                    <Label x:Name="telemC" Height="25"/>
+                    <Label x:Name="telemD" Height="25"/>
                 </StackPanel>
-
-
-
-
             </GroupBox>
-
-
             <GroupBox Header="Moteurs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="193">
                 <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Label x:Name="VitesseG"/>
-                    <Label x:Name="VitesseD"/>
+                    <Label x:Name="VitesseG" Height="37"/>
+                    <Label x:Name="VitesseD" Height="37"/>
                 </StackPanel>
-
-
             </GroupBox>
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical" Margin="0,5" >
+            <StackPanel Orientation="Vertical" Margin="0" Width="183"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                 <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonEnvoyer_Click" Margin="5" />
                 <Button x:Name="buttonclear" Content="Clear" Grid.Column="1" HorizontalAlignment="Stretch" Width="100" VerticalAlignment="Stretch" Click="buttonclear_Click" Margin="5" />
                 <Button x:Name="buttonTest" Content="Test" Grid.Column="1" HorizontalAlignment="Stretch" Width="100"  VerticalAlignment="Stretch" Click="buttonTest_Click" Margin="5" />
             </StackPanel>
         </StackPanel>
-        
+        <GroupBox x:Name="oscilloscope" Grid.Column="1" Header="Oscilloscope" Margin="0" VerticalAlignment="Bottom" Height="213">
+            <osc:WpfOscilloscope x:Name="oscilloSpeed"/>
+        </GroupBox>
+        <StackPanel HorizontalAlignment="Right" Margin="0,90,5,0" Width="207" Height="213" VerticalAlignment="Top">
+            <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay2" Height="214" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </Window>

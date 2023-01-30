@@ -81,4 +81,3 @@ void InitIO()
     _RP36R = 0b00001; //Remappe la sortie TX1 vers RP36
 
 }
-
