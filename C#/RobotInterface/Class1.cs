@@ -23,6 +23,8 @@ namespace RobotInterfaceNet
         public float angleRad;
         public float vitesseAng;
         public float vitesseLin;
+        public float vitesseMoteurGauche;
+        public float vitesseMoteurDroit;
         public Queue<byte> byteListReceived = new Queue<byte>();
 
         public Robot()

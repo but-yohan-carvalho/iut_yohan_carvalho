@@ -62,7 +62,7 @@ int main(void) {
                 }
                 
 //        unsigned char payload[] = {};
-//        UartEncodeAndSendMessage(0x0020, 2, payload)
+//        UartEncodeAndSendMessage(0x0020, 2, payload);
         // SendMessage((unsigned char*) "Au revoir", 9);
 
         //__delay32(1000);
@@ -198,8 +198,8 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_ATTENTE;
             break;
     }
-    
-    
+    unsigned char payload[] = {robotState.vitesseGaucheConsigne, -robotState.vitesseDroiteConsigne};
+    UartEncodeAndSendMessage(0x0040, 2, payload);   
 }
 
 unsigned char nextStateRobot = 0;

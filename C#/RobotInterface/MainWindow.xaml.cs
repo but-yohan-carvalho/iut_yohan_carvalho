@@ -42,7 +42,7 @@ namespace RobotInterfaceNet
             timerAffichage.Start();
             oscilloSpeed.AddOrUpdateLine(1, 200, "Ligne1");
             oscilloSpeed.ChangeLineColor(1, Color.FromRgb(255,0,100));
-            oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
+           
 
 
         }
@@ -63,7 +63,11 @@ namespace RobotInterfaceNet
                //textBoxReception.Text += "0x" + c.ToString("X2") + " ";
                 DecodeMessage(c);
             }
-
+            oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
+            //asservSpeedDisplay2.UpdateIndependantOdometrySpeed(robot.positionX, robot.positionY);
+            asservSpeedDisplay2.UpdatePolarOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
+            asservSpeedDisplay2.UpdateIndependantOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
+           
         }
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
