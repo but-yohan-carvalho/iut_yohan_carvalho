@@ -66,7 +66,7 @@ namespace RobotInterfaceNet
             oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
             //asservSpeedDisplay2.UpdateIndependantOdometrySpeed(robot.positionX, robot.positionY);
             asservSpeedDisplay2.UpdatePolarOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
-            asservSpeedDisplay2.UpdateIndependantOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
+            asservSpeedDisplay2.UpdatePolarSpeedConsigneValues(robot.consigneGauche, robot.consigneDroite);
            
         }
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)

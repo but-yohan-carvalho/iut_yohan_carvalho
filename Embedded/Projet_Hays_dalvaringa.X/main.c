@@ -198,8 +198,8 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_ATTENTE;
             break;
     }
-    unsigned char payload[] = {robotState.vitesseGaucheConsigne, -robotState.vitesseDroiteConsigne};
-    UartEncodeAndSendMessage(0x0040, 2, payload);   
+//    unsigned char payload[] = {robotState.vitesseGaucheConsigne, -robotState.vitesseDroiteConsigne};
+//    UartEncodeAndSendMessage(0x0040, 2, payload);   
 }
 
 unsigned char nextStateRobot = 0;
