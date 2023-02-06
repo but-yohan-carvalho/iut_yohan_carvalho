@@ -66,7 +66,7 @@ namespace RobotInterfaceNet
             oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
             //asservSpeedDisplay2.UpdateIndependantOdometrySpeed(robot.positionX, robot.positionY);
             asservSpeedDisplay2.UpdatePolarOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
-            asservSpeedDisplay2.UpdatePolarSpeedConsigneValues(robot.consigneGauche, robot.consigneDroite);
+            //asservSpeedDisplay2.UpdatePolarSpeedConsigneValues(robot.consigneGauche, robot.consigneDroite);
            
         }
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
@@ -192,6 +192,7 @@ namespace RobotInterfaceNet
             ConsigneVitesse = 0x40,
             EtapeEnCours = 0x50,
             position = 0x61,
+            Corrector = 0x63,
 
         }
         void processDecodeMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
@@ -290,6 +291,10 @@ namespace RobotInterfaceNet
                     vitLin.Content = "Vitesse linéaire : " + robot.vitesseLin;
                     vitAng.Content = "Vitesse angulaire : " + robot.vitesseAng;
 
+                    break;
+
+                case (int)msgFonction.Corrector:
+                    
                     break;
             }
             
