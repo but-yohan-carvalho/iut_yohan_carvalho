@@ -32,7 +32,7 @@ namespace RobotInterfaceNet
             // Set this code once in App.xaml.cs or application startup
             SciChartSurface.SetRuntimeLicenseKey("v1q9N0ZRgIzj1ebP4riiz/JWED4s1OkznHZBV5wW8Fv5kBlyo+UaxAlOttFNldGfu7yXJSsa7Jb6i9wafTefd2NQC4bCrpYo611tmhju/mJJnJFpbJ0NurEv42jlwADPuF8w2faKMUYO5hCc6bEbI0aj34uP0XjXYHNQ4ZgVCgCuzmSW9LKHcr5lVmwkRXf5xpQDm/6J62WcC2nWRhXwe9gPSe+ewRqPifnSK5FhgmKkf/v9cVIlLQYuAK3x840/+ygJKmBvyc+05j/qQSNxPPcGLbKV1Pdinm00KBMjVKCGkA6FIAj/QOAjCLtLk3+7oV0i3GLKjqELR167YeXJZE8z8XZRoXRXaEh4RL4C/DFbpg7mTMQ1hDDiNx4hA/zisuBtMzDgMkaQ9tSn3IghsHvCnuA90lgSZh/gpDp6ZPO6lNqqCrBas/5fTvhMvYgKCg27lxk6qVPN/6v3SS31sAeEyc0U8Erj+MgGBvpwFr7vHbaASaVKtlRQWNChiU6QqA==");
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM11", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM12", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
