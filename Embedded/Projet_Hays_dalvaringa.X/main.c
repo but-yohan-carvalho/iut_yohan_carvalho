@@ -205,7 +205,7 @@ void OperatingSystemLoop(void) {
 unsigned char nextStateRobot = 0;
 
 void SendStateSupervision()
-{
+{       
     unsigned long timeStampCourant = timestamp;
     unsigned char payload[] = {stateRobot ,
     (unsigned char) (timeStampCourant>>24),

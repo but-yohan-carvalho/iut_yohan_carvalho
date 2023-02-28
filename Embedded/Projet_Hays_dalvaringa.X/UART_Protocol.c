@@ -3,6 +3,8 @@
 #include "CB_TX1.h"
 #include "CB_RX1.h"
 #include "main.h"
+
+
 int rcvState = Waiting;
 int msgDecodedFunction = 0;
 int msgDecodedPayloadLength = 0;
