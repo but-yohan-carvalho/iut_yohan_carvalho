@@ -181,7 +181,7 @@ namespace RobotInterfaceNet
             byteList = Encoding.ASCII.GetBytes(s);
             UartEncodeAndSendMessage(0x0080, 7, byteList);
             //textBoxReception.Text = s;
-            
+
 
         }
         public enum msgFonction
@@ -402,7 +402,7 @@ namespace RobotInterfaceNet
                     //}
                     rcvState = StateReception.Waiting;
                     break;
-                default:
+                    default:
                     rcvState = StateReception.Waiting;
                     break;
             }

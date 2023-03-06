@@ -20,6 +20,11 @@
         <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0" Margin="0,0,0,256">
             <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" Background="#fffdf1"/>
         </GroupBox>
+        <StackPanel HorizontalAlignment="Right" Margin="0,52,5,0" Width="248" Height="241" VerticalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}">
+            <GroupBox x:Name="groupBox" Header="GroupBox" Height="243" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+                <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay2" Margin="0,-13,0,0"/>
+            </GroupBox>
+        </StackPanel>
 
         <GroupBox Header="Position" VerticalAlignment="Bottom" Height="256" Margin="0,0,258,0">
             <StackPanel Margin="0">
@@ -63,14 +68,9 @@
                 <Button x:Name="buttonTest" Content="Test" Grid.Column="1" HorizontalAlignment="Stretch" Width="100"  VerticalAlignment="Stretch" Click="buttonTest_Click" Margin="5" />
             </StackPanel>
         </StackPanel>
-        <GroupBox x:Name="oscilloscope" Grid.Column="1" Header="Oscilloscope" Margin="0" Height="213" VerticalAlignment="Bottom">
+        <GroupBox x:Name="oscilloscope" Grid.Column="1" Header="Oscilloscope" Margin="10,0,-10,0" Height="213" VerticalAlignment="Bottom">
             <osc:WpfOscilloscope x:Name="oscilloSpeed"/>
         </GroupBox>
-        <StackPanel HorizontalAlignment="Right" Margin="0,47,5,0" Width="248" Height="256" VerticalAlignment="Top" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}">
-            <GroupBox x:Name="groupBox" Header="GroupBox" Height="254">
-                <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay2" Margin="0,-12,0,0"/>
-            </GroupBox>
-
-        </StackPanel>
+        
     </Grid>
 </Window>
