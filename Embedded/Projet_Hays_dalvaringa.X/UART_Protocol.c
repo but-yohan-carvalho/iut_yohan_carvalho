@@ -118,6 +118,7 @@ void UartProcessDecodedMessage(unsigned char function,
 }
 
 
+
 void SetRobotAutoControlState(unsigned char state){
     if((state!=autoControlActivated) && ((state==0)||(state==1))){
         autoControlActivated=state;

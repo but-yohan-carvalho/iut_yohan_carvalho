@@ -24,6 +24,7 @@
             <GroupBox x:Name="groupBox" Header="GroupBox" Height="243" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
                 <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay2" Margin="0,-13,0,0"/>
             </GroupBox>
+
         </StackPanel>
 
         <GroupBox Header="Position" VerticalAlignment="Bottom" Height="256" Margin="0,0,258,0">

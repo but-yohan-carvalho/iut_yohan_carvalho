@@ -17,6 +17,7 @@
 #include "UART.h"
 #include "UART_Protocol.h"
 #include "QEI.h"
+#include "Asservissement.h"
 
 unsigned int ADCValue0;
 unsigned int ADCValue1;
@@ -290,6 +291,8 @@ void SetNextRobotStateInAutomaticMode() {
     }
 }
 */
+
+//UartProcessDecodedMessage(0x0063, 29, tabasx);
 
 void SetNextRobotStateInAutomaticMode(void) {
     unsigned char positionObstacle = PAS_D_OBSTACLE;
