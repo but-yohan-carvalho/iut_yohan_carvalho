@@ -15,6 +15,14 @@ void UartProcessDecodedMessage(unsigned char msgFunction, unsigned char msgPaylo
 void SetRobotState(unsigned char payload);
 void SetRobotAutoControlState(unsigned char state);
 
+
+//double KpX;
+//double KiX;
+//double KdX;
+//double proportionelleMaxX;
+//double integralMaxX;
+//double deriveeMaxX;
+
 #define Waiting 0
 #define FunctionMSB 1
 #define FunctionLSB 2
@@ -26,6 +34,7 @@ void SetRobotAutoControlState(unsigned char state);
 
 #define SET_ROBOT_STATE 0x0051
 #define SET_ROBOT_MANUAL_CONTROL 0x0052
+#define SET_CORRECTOR 0x0063
 
 
 

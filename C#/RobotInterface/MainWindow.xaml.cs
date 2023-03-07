@@ -208,9 +208,7 @@ namespace RobotInterfaceNet
             Array.Copy(tdermax, 0, tabasx, 21, 4);
             Array.Copy(tconsigne, 0, tabasx, 25, 4);
 
-            UartEncodeAndSendMessage(0x0063, 29, tabasx);
-
-
+            UartEncodeAndSendMessage(0x63, 29, tabasx);
         }
         public enum msgFonction
         {
