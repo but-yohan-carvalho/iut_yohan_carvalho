@@ -171,10 +171,10 @@ void UartProcessDecodedMessage(unsigned char function,
             consigneX = getFloat(tkconsigne, 0);
             
             if(payload[0] == 0){
-                SetupPidAsservissement(&robotState.PidX, Kp, KiX, KdX, proportionelleMaxX, deriveeMaxX, consigneX);
+                SetupPidAsservissement(&robotState.PidX, KpX, KiX, KdX, proportionelleMaxX, deriveeMaxX, consigneX);
             }
             else{
-                SetupPidAsservissement(&robotState.PidTheta, Kp, KiX, KdX, proportionelleMaxX, deriveeMaxX, consigneX);
+                SetupPidAsservissement(&robotState.PidTheta, KpX, KiX, KdX, proportionelleMaxX, deriveeMaxX, consigneX);
             }
             
             break;
