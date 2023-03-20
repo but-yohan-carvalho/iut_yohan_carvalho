@@ -221,6 +221,30 @@ namespace RobotInterfaceNet
             Corrector = 0x63,
 
         }
+        float kpX = 0;
+        float kiX = 0;
+        float kdX = 0;
+        float erreurX = 0;
+        float consigneX = 0;
+        float propmaxX = 0;
+        float intmaxX = 0;
+        float dermaxX = 0;
+        float corPX = 0;
+        float corIX = 0;
+        float corDX = 0;
+
+        float kpT = 0;
+        float kiT = 0;
+        float kdT = 0;
+        float erreurT = 0;
+        float consigneT = 0;
+        float propmaxT = 0;
+        float intmaxT = 0;
+        float dermaxT = 0;
+        float corPT = 0;
+        float corIT = 0;
+        float corDT = 0;
+
         void processDecodeMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
             switch (msgFunction)
@@ -320,7 +344,7 @@ namespace RobotInterfaceNet
                     break;
 
                 case (int)msgFonction.Corrector:
-                    
+                  
                     break;
             }
             
