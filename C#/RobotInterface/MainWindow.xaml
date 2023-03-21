@@ -20,7 +20,7 @@
         <GroupBox  Header="Émission" Grid.Row="0" Grid.Column="0" Margin="0,0,0,256">
             <TextBox x:Name="textBoxEmission" TextWrapping="Wrap" HorizontalAlignment="Stretch" AcceptsReturn="True" Visibility="Visible" KeyUp="textBoxEmission_KeyUp" Background="#fffdf1"/>
         </GroupBox>
-        <StackPanel HorizontalAlignment="Right" Margin="0,52,5,0" Width="248" Height="241" VerticalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}">
+        <StackPanel HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Margin="0,52,5,0" Width="248" Height="241" VerticalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}">
             <GroupBox x:Name="groupBox" Header="GroupBox" Height="243" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
                 <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay2" Margin="0,-13,0,0"/>
             </GroupBox>

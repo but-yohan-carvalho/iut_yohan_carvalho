@@ -182,33 +182,25 @@ namespace RobotInterfaceNet
              UartEncodeAndSendMessage(0x0080, 7, byteList);
              //textBoxReception.Text = s;*/
 
-            float kp = 0.75f;
-            float ki = 1.08f;
-            float kd = 0.29f;
-            float propmax = 15.63f;
-            float intmax = 2.34f;
-            float dermax = 8.7f;
-            float consigne = 18.56f;
+            float kp = 0;
+            float ki = 1;
+            float kd = 2;
+            float propmax = 3;
+            float intmax = 4;
+            float dermax = 5;
+            float consigne = 6;
 
-            byte[] tkp = BitConverter.GetBytes(kp);
-            byte[] tki = BitConverter.GetBytes(ki);
-            byte[] tkd = BitConverter.GetBytes(kd);
-            byte[] tpropmax = BitConverter.GetBytes(propmax);
-            byte[] tintmax = BitConverter.GetBytes(intmax);
-            byte[] tdermax = BitConverter.GetBytes(dermax);
-            byte[] tconsigne = BitConverter.GetBytes(consigne);
+            byte[] tabasx = new byte[30];
+            Array.Copy(BitConverter.GetBytes(kp), 0, tabasx, 0, 4);
+            Array.Copy(BitConverter.GetBytes(ki), 0, tabasx, 4, 4);
+            Array.Copy(BitConverter.GetBytes(kd), 0, tabasx, 8, 4);
+            Array.Copy(BitConverter.GetBytes(propmax), 0, tabasx, 12, 4);
+            Array.Copy(BitConverter.GetBytes(intmax), 0, tabasx, 16, 4);
+            Array.Copy(BitConverter.GetBytes(dermax), 0, tabasx, 20, 4);
+            Array.Copy(BitConverter.GetBytes(consigne), 0, tabasx, 24, 4);
 
-            byte[] tabasx = new byte[29];
-            tabasx[0] = 0;
-            Array.Copy(tkp, 0, tabasx, 1, 4);
-            Array.Copy(tki, 0, tabasx, 5, 4);
-            Array.Copy(tkd, 0, tabasx, 9, 4);
-            Array.Copy(tpropmax, 0, tabasx, 13, 4);
-            Array.Copy(tintmax, 0, tabasx, 17, 4);
-            Array.Copy(tdermax, 0, tabasx, 21, 4);
-            Array.Copy(tconsigne, 0, tabasx, 25, 4);
 
-            UartEncodeAndSendMessage(0x63, 29, tabasx);
+            UartEncodeAndSendMessage(0x0063, 30, tabasx);
         }
         public enum msgFonction
         {

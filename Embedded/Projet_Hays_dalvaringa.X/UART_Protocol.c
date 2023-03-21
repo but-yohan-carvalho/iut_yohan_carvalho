@@ -99,10 +99,9 @@ void UartDecodeMessage(unsigned char c) {
             break;
         case CheckSum:
 
-            receiveChecksum = c;
             calculChecksum = UartCalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
-            if (calculChecksum == receiveChecksum) {
-                UartEncodeAndSendMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
+            if (calculChecksum == c) {
+                UartProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
             }
             rcvState = Waiting;
             break;
@@ -112,7 +111,6 @@ void UartDecodeMessage(unsigned char c) {
     }
 }
 
-unsigned char tkp[4], tki[4], tkd[4], tkprop[4], tkintegrale[4], tkderivee[4], tkconsigne[4];
 
 void UartProcessDecodedMessage(unsigned char function,
         unsigned char payloadLength, unsigned char payload[]) {
@@ -127,56 +125,17 @@ void UartProcessDecodedMessage(unsigned char function,
             break;
         case SET_CORRECTOR:
             
-            tkp[0] = payload[1];
-            tkp[1] = payload[2];
-            tkp[2] = payload[3];
-            tkp[3] = payload[4];
+            KpX = getFloat(payload,0);
+            KiX = getFloat(payload,4);
+            KdX= getFloat(payload,8);
+            proportionelleMaxX = getFloat(payload,12);
+            integralMaxX = getFloat(payload,16);
+            deriveeMaxX = getFloat(payload, 20);
+            consigneX = getFloat(payload, 24);
             
-            tki[0] = payload[5];
-            tki[1] = payload[6];
-            tki[2] = payload[7];
-            tki[3] = payload[8];
-            
-            tkd[0] = payload[9];
-            tkd[1] = payload[10];
-            tkd[2] = payload[11];
-            tkd[3] = payload[12];
-            
-            tkprop[0] = payload[13];
-            tkprop[1] = payload[14];
-            tkprop[2] = payload[15];
-            tkprop[3] = payload[16];
-            
-            tkintegrale[0] = payload[17];
-            tkintegrale[1] = payload[18];
-            tkintegrale[2] = payload[19];
-            tkintegrale[3] = payload[20];
-            
-            tkderivee[0] = payload[21];
-            tkderivee[1] = payload[22];
-            tkderivee[2] = payload[23];
-            tkderivee[3] = payload[24];
-            
-            tkconsigne[0] = payload[25];
-            tkconsigne[1] = payload[26];
-            tkconsigne[2] = payload[27];
-            tkconsigne[3] = payload[28];
-                          
-            KpX = getFloat(tkp, 0);
-            KiX = getFloat(tki, 0);
-            KdX= getFloat(tkd, 0);
-            proportionelleMaxX = getFloat(tkprop, 0);
-            integralMaxX = getFloat(tkintegrale, 0);
-            deriveeMaxX = getFloat(tkderivee, 0);
-            consigneX = getFloat(tkconsigne, 0);
-            
-            if(payload[0] == 0){
-                SetupPidAsservissement(&robotState.PidX, KpX, KiX, KdX, proportionelleMaxX, deriveeMaxX, consigneX);
-            }
-            else{
-                SetupPidAsservissement(&robotState.PidTheta, KpX, KiX, KdX, proportionelleMaxX, deriveeMaxX, consigneX);
-            }
-            
+
+            SetupPidAsservissement(&robotState.PidX, KpX, KiX, KdX, proportionelleMaxX, deriveeMaxX, consigneX);
+
             break;
             
         default:
