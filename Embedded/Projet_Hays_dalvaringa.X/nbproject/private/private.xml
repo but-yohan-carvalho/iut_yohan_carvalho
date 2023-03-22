@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/Asservissement.c</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/QEI.h</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/Robot.c</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/PWM.c</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/Robot.h</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/UART_Protocol.c</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/QEI.c</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/Asservissement.h</file>
+            <file>file:/C:/GitHub/iut_yohan_carvalho/Embedded/Projet_Hays_dalvaringa.X/main.c</file>
+        </group>
     </open-files>
 </project-private>
