@@ -25,6 +25,8 @@ double integralMax;
 double erreurDeriveeMax;
 double deriveeMax;
 double erreurIntegrale;
+double erreurProportionnelle;
+double erreurDerivee;
 double epsilon_1;
 double erreur;
 //For Debug only
