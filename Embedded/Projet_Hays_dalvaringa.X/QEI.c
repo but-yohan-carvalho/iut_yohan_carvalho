@@ -8,10 +8,8 @@
 #include "Utilities.h"
 #include "UART_Protocol.h"
 
-#define POSITION_DATA 0x0061    
-//#define DISTROUES 281.2
-#define DISTROUES 218.5
-#define FREQ_ECH_QEI 250
+
+
 
 void InitQEI1() {
     QEI1IOCbits.SWPAB = 1; //QEAx and QEBx are swapped
@@ -51,8 +49,8 @@ void QEIUpdateData() {
 
 
     //Conversion en mm (r\?egl\?e pour la taille des roues codeuses)
-    QeiDroitPosition = 0.0164933 * QEI1RawValue;
-    QeiGauchePosition = -0.0164933 * QEI2RawValue;
+    QeiDroitPosition = 0.0000164933 * QEI1RawValue;
+    QeiGauchePosition = -0.0000164933 * QEI2RawValue;
 
 
     //Calcul des deltas de position

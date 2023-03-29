@@ -29,6 +29,8 @@ double erreurProportionnelle;
 double erreurDerivee;
 double epsilon_1;
 double erreur;
+double erreurProportionelle;
+double erreurDerivee;
 //For Debug only
 double corrP;
 double corrI;
@@ -38,6 +40,9 @@ double corrD;
 PidCorrector;
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax);
+double Correcteur(volatile PidCorrector* PidCorr, double erreur);
+void UpdateAsservissement();
+void PWMSetSpeedConsignePolaire(double corVitX, double CorVitTheta);
 
 #ifdef	__cplusplus
 }
