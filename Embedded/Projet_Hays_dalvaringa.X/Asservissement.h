@@ -10,7 +10,9 @@
 
 #ifdef	__cplusplus
 extern "C" {
-#endif
+#endif 
+
+#define ASSERV_DATA 0x0063 
 
 typedef struct _PidCorrector
 {
@@ -30,7 +32,7 @@ double erreurDerivee;
 double epsilon_1;
 double erreur;
 double erreurProportionelle;
-double erreurDerivee;
+double consigne;
 //For Debug only
 double corrP;
 double corrI;

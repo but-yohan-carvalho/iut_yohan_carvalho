@@ -213,7 +213,7 @@ void SendStateSupervision()
     (unsigned char) (timeStampCourant>>16),
     (unsigned char) (timeStampCourant>>8),
     (unsigned char) (timeStampCourant>>0)};
-    //UartEncodeAndSendMessage(0x0050, 5, payload);
+    UartEncodeAndSendMessage(0x0050, 5, payload);
 }
 
 /*

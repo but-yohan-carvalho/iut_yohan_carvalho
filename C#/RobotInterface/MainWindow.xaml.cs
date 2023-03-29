@@ -32,7 +32,7 @@ namespace RobotInterfaceNet
             // Set this code once in App.xaml.cs or application startup
             SciChartSurface.SetRuntimeLicenseKey("v1q9N0ZRgIzj1ebP4riiz/JWED4s1OkznHZBV5wW8Fv5kBlyo+UaxAlOttFNldGfu7yXJSsa7Jb6i9wafTefd2NQC4bCrpYo611tmhju/mJJnJFpbJ0NurEv42jlwADPuF8w2faKMUYO5hCc6bEbI0aj34uP0XjXYHNQ4ZgVCgCuzmSW9LKHcr5lVmwkRXf5xpQDm/6J62WcC2nWRhXwe9gPSe+ewRqPifnSK5FhgmKkf/v9cVIlLQYuAK3x840/+ygJKmBvyc+05j/qQSNxPPcGLbKV1Pdinm00KBMjVKCGkA6FIAj/QOAjCLtLk3+7oV0i3GLKjqELR167YeXJZE8z8XZRoXRXaEh4RL4C/DFbpg7mTMQ1hDDiNx4hA/zisuBtMzDgMkaQ9tSn3IghsHvCnuA90lgSZh/gpDp6ZPO6lNqqCrBas/5fTvhMvYgKCg27lxk6qVPN/6v3SS31sAeEyc0U8Erj+MgGBvpwFr7vHbaASaVKtlRQWNChiU6QqA==");
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM1", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -201,16 +201,18 @@ namespace RobotInterfaceNet
 
 
             UartEncodeAndSendMessage(0x0063, 30, tabasx);
+            asservSpeedDisplay2.UpdatePolarSpeedErrorValues(erreurX, erreurT);
+            asservSpeedDisplay2.UpdatePolarOdometrySpeed(kpX, kpT);
         }
         public enum msgFonction
         {
-            transmissionText = 0x80,
-            ReglageLed = 0x20,
-            DistanceTelemeter = 0x30,
-            ConsigneVitesse = 0x40,
-            EtapeEnCours = 0x50,
-            position = 0x61,
-            Corrector = 0x63,
+            transmissionText = 0x0080,
+            ReglageLed = 0x0020,
+            DistanceTelemeter = 0x0030,
+            ConsigneVitesse = 0x0040,
+            EtapeEnCours = 0x0050,
+            position = 0x0061,
+            Corrector = 0x0063,
 
         }
         float kpX = 0;
@@ -336,7 +338,30 @@ namespace RobotInterfaceNet
                     break;
 
                 case (int)msgFonction.Corrector:
-                  
+                    kpX = BitConverter.ToSingle(msgPayload, 4);
+                    kiX = BitConverter.ToSingle(msgPayload, 8);
+                    kdX = BitConverter.ToSingle(msgPayload, 12);
+                    propmaxX = BitConverter.ToSingle(msgPayload, 16);
+                    intmaxX = BitConverter.ToSingle(msgPayload, 20);
+                    dermaxX = BitConverter.ToSingle(msgPayload, 24);
+                    erreurX = BitConverter.ToSingle(msgPayload, 28);
+                    consigneX = BitConverter.ToSingle(msgPayload, 32);
+                    corPX = BitConverter.ToSingle(msgPayload, 36);
+                    corIX = BitConverter.ToSingle(msgPayload, 40);
+                    corDX = BitConverter.ToSingle(msgPayload, 44);
+
+                    kpT = BitConverter.ToSingle(msgPayload, 48);
+                    kiT = BitConverter.ToSingle(msgPayload, 52);
+                    kdT = BitConverter.ToSingle(msgPayload, 56);
+                    propmaxT = BitConverter.ToSingle(msgPayload, 60);
+                    intmaxT = BitConverter.ToSingle(msgPayload, 64);
+                    dermaxT = BitConverter.ToSingle(msgPayload, 68);
+                    erreurT = BitConverter.ToSingle(msgPayload, 72);
+                    consigneT = BitConverter.ToSingle(msgPayload, 76);
+                    corPT = BitConverter.ToSingle(msgPayload, 80);
+                    corIT = BitConverter.ToSingle(msgPayload, 84);
+                    corDT = BitConverter.ToSingle(msgPayload, 88);
+
                     break;
             }
             

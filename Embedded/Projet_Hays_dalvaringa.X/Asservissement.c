@@ -4,10 +4,7 @@
 #include "Toolbox.h"
 #include "UART_Protocol.h"
 #include "QEI.h"
-<<<<<<< HEAD
-=======
 #include "timer.h"
->>>>>>> af3d65c8d18f3109c1987b56af2c6e2c2d3f0641
 #include "Robot.h"
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax) {
@@ -30,13 +27,17 @@ void EnvoieAsservissementConstant(volatile PidCorrector* PidCorr) {
     getBytesFromFloat(AsservissementPayload, 12, PidCorr->proportionelleMax);
     getBytesFromFloat(AsservissementPayload, 16, PidCorr->integralMax);
     getBytesFromFloat(AsservissementPayload, 20, PidCorr->deriveeMax);
-
-    UartEncodeAndSendMessage(0x0063, 20, AsservissementPayload);
+    getBytesFromFloat(AsservissementPayload, 24, PidCorr->erreur);
+    getBytesFromFloat(AsservissementPayload, 28, PidCorr->consigne);
+    getBytesFromFloat(AsservissementPayload, 32, PidCorr->corrP);
+    getBytesFromFloat(AsservissementPayload, 36, PidCorr->corrI);
+    getBytesFromFloat(AsservissementPayload, 40, PidCorr->corrD);
+    
+    UartEncodeAndSendMessage(ASSERV_DATA, 40, AsservissementPayload);
 }
 
 double Correcteur(volatile PidCorrector* PidCorr, double erreur) {
     PidCorr->erreur = erreur;
-<<<<<<< HEAD
     double erreurProp = PidCorr->erreurProportionnelle;
     erreurProp = LimitToInterval(erreur, -PidCorr->erreurProportionelleMax / PidCorr->Kp, PidCorr->erreurProportionelleMax / PidCorr->Kp);
     PidCorr->corrP = PidCorr->Kp * PidCorr->erreurProportionnelle;
@@ -45,45 +46,20 @@ double Correcteur(volatile PidCorrector* PidCorr, double erreur) {
     PidCorr->erreurIntegrale = LimitToInterval(PidCorr->erreurIntegrale + PidCorr->erreur / FREQ_ECH_QEI, -PidCorr->erreurIntegraleMax / PidCorr->Ki, PidCorr->erreurIntegraleMax / PidCorr->Ki);
     PidCorr->corrI = PidCorr->Ki * PidCorr->erreurIntegrale;
 
-=======
-    double erreurProp = PidCorr->erreurProportionelle; //LimitToInterval(erreur, 0, 10);
-    erreurProp = LimitToInterval(erreur, -PidCorr->erreurProportionelleMax / PidCorr->Kp, PidCorr->erreurProportionelleMax / PidCorr->Kp);
-    PidCorr->corrP = PidCorr->Kp * erreurProp;
-
-
-    PidCorr->erreurIntegrale += (PidCorr->erreur / FREQ_ECH_QEI);
-    PidCorr->erreurIntegrale = LimitToInterval(PidCorr->erreurIntegrale, -PidCorr->erreurIntegraleMax / PidCorr->Ki, PidCorr->erreurIntegraleMax / PidCorr->Ki);
-    PidCorr->corrI = PidCorr->Ki * PidCorr->erreurIntegrale;
-
-
->>>>>>> af3d65c8d18f3109c1987b56af2c6e2c2d3f0641
     double erreurDerivee = (erreur - PidCorr->epsilon_1) * FREQ_ECH_QEI;
     double deriveeBornee = LimitToInterval(erreurDerivee, -PidCorr->erreurDeriveeMax / PidCorr->Kd, PidCorr->erreurDeriveeMax / PidCorr->Kd);
     PidCorr->epsilon_1 = erreur;
     PidCorr->corrD = deriveeBornee * PidCorr->Kd;
-<<<<<<< HEAD
-
-=======
->>>>>>> af3d65c8d18f3109c1987b56af2c6e2c2d3f0641
     return PidCorr->corrP + PidCorr->corrI + PidCorr->corrD;
 }
 
 void UpdateAsservissement() {
-<<<<<<< HEAD
-    robotState.PidX.erreur = ...;
-    robotState.PidTheta.erreur = ...;
-    robotState.xCorrectionVitessePourcent = Correcteur(&robotState.PidX, robotState.PidX.erreur);
-    robotState.thetaCorrectionVitessePourcent = ...;
-    PWMSetSpeedConsignePolaire(robotState.xCorrectionVitessePourcent,robotState.thetaCorrectionVitessePourcent);
-            
-}
-=======
     robotState.PidX.erreur = robotState.erreurVitesseLin;
     robotState.PidTheta.erreur = robotState.erreurVitesseAng;
     robotState.xCorrectionVitessePourcent = Correcteur(&robotState.PidX, robotState.PidX.erreur);
             
     robotState.thetaCorrectionVitessePourcent = Correcteur(&robotState.PidTheta, robotState.PidTheta.erreur);
-    PWMSetSpeedConsignePolaire(robotState.xCorrectionVitessePourcent, robotState.thetaCorrectionVitessePourcent);
+    PWMSetSpeedConsignePolaire(robotState.xCorrectionVitessePourcent, robotState.thetaCorrectionVitessePourcent);   
 }
 
 void PWMSetSpeedConsignePolaire(double corVitX, double CorVitTheta){
@@ -91,5 +67,4 @@ void PWMSetSpeedConsignePolaire(double corVitX, double CorVitTheta){
     CorVitTheta = robotState.vitesseAngulaireFromOdometry - robotState.erreurVitesseAng;
 }
             
->>>>>>> af3d65c8d18f3109c1987b56af2c6e2c2d3f0641
 

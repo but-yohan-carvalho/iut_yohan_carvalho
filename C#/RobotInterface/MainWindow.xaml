@@ -23,7 +23,7 @@
         </GroupBox>
         <StackPanel HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Margin="0,57,5,5" Width="248" Height="241" VerticalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}">
             <GroupBox x:Name="groupBox" Header="GroupBox" Height="243" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
-                <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay2" Margin="0,-13,0,0"/>
+                <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay2"/>
             </GroupBox>
 
         </StackPanel>

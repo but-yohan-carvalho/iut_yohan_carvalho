@@ -33,12 +33,8 @@ typedef struct robotStateBITS {
             double angleRadianFromOdometry;
             double xCorrectionVitessePourcent;
             double thetaCorrectionVitessePourcent;
-<<<<<<< HEAD
-=======
             double erreurVitesseLin;
             double erreurVitesseAng;
->>>>>>> af3d65c8d18f3109c1987b56af2c6e2c2d3f0641
-            
             PidCorrector PidX;
             PidCorrector PidTheta;
         }
