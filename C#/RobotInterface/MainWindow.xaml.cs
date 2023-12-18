@@ -16,6 +16,12 @@ using System.Windows.Shapes;
 using System.IO.Ports;
 using System.Windows.Threading;
 using SciChart.Charting.Visuals;
+using System.Diagnostics;
+using SciChart;
+using System.Globalization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace RobotInterfaceNet
 {
@@ -30,9 +36,10 @@ namespace RobotInterfaceNet
         public MainWindow()
         {
             // Set this code once in App.xaml.cs or application startup
-            SciChartSurface.SetRuntimeLicenseKey("v1q9N0ZRgIzj1ebP4riiz/JWED4s1OkznHZBV5wW8Fv5kBlyo+UaxAlOttFNldGfu7yXJSsa7Jb6i9wafTefd2NQC4bCrpYo611tmhju/mJJnJFpbJ0NurEv42jlwADPuF8w2faKMUYO5hCc6bEbI0aj34uP0XjXYHNQ4ZgVCgCuzmSW9LKHcr5lVmwkRXf5xpQDm/6J62WcC2nWRhXwe9gPSe+ewRqPifnSK5FhgmKkf/v9cVIlLQYuAK3x840/+ygJKmBvyc+05j/qQSNxPPcGLbKV1Pdinm00KBMjVKCGkA6FIAj/QOAjCLtLk3+7oV0i3GLKjqELR167YeXJZE8z8XZRoXRXaEh4RL4C/DFbpg7mTMQ1hDDiNx4hA/zisuBtMzDgMkaQ9tSn3IghsHvCnuA90lgSZh/gpDp6ZPO6lNqqCrBas/5fTvhMvYgKCg27lxk6qVPN/6v3SS31sAeEyc0U8Erj+MgGBvpwFr7vHbaASaVKtlRQWNChiU6QqA==");
+            // Set this code once in App.xaml.cs or application startup
+            SciChartSurface.SetRuntimeLicenseKey("osuraiMh+/Ur8XOBfDQ8DGxK4LgYsM/LqTbAxL+Zr/plYfLTO8DCQqcE5HEX0FNuCbD4UhyjOWV8n7OfWJPpsgOBUy+YzmjEgegfGB6FT5X/CSO2T/RmZMkumH+dPLGF+MluNzd9wPXBdefHmN5vz7vVIGM+XSqWrTSeQU8sp49g3HTgiFHs1I7zb+h2Dprp+56rEKr0e2FfGpn2n/CTkb/NxfkyYHsYp4+aGYhTE/VjaozHfzPm3/oP6qKO6wSWmzCikHOnk9XKYFPJwZtqKjCR6shU2HaINnKlroD8/1m8v4QWnLDvHk2rLjmekbEcfMD0dRkKKpCo4//gmwtWl9BHR3n75WBLNh4JyReLNUZvMsR/ObrRpcBJOKoi9ALDzW7Y/HE90g8Hqqo31Et/ZoqR68AZzDPXzc1J7VYxBrzgkJEr/YwXxO6pVZsczo3wAVKdDB4qwnv0o6R9URSJOc7wA8cBkiqrz4XxIQUDqqbIN1Z9En/PKpKiJS2a3Zq+n7snJ8vj"); 
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM1", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM10", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -40,14 +47,16 @@ namespace RobotInterfaceNet
             timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
             timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
-            oscilloSpeed.AddOrUpdateLine(1, 200, "Ligne1");
-            oscilloSpeed.ChangeLineColor(1, Color.FromRgb(255,0,100));
+            //oscilloSpeed.AddOrUpdateLine(1, 200, "Ligne1");
+            //oscilloSpeed.ChangeLineColor(1, Color.FromRgb(255,0,100));
            
 
 
         }
 
         string receivedText = "";
+
+        List<byte> currentByteList = new List<byte>();
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
@@ -59,21 +68,106 @@ namespace RobotInterfaceNet
               }*/
             while (robot.byteListReceived.Count > 0)
             {
+
                 var c = robot.byteListReceived.Dequeue();
-               //textBoxReception.Text += "0x" + c.ToString("X2") + " ";
-                DecodeMessage(c);
+                if(c!='\r' && c != '\n')
+                {
+                    receivedText += Encoding.ASCII.GetString(new byte[] { c });
+
+                    currentByteList.Add(c);
+                }
+                else if(c == '\r')
+                {
+                    Debug.WriteLine(receivedText);
+                    receivedText = "";
+
+                    DecodeMessage(c);
+                    byte[] LastCompleteByteList = new byte[currentByteList.Count];
+
+
+                    currentByteList.CopyTo(LastCompleteByteList);
+
+
+                    textBoxReception.Text = Encoding.ASCII.GetString(LastCompleteByteList) + "\n" + textBoxReception.Text;
+                    if (textBoxReception.Text.Length > 200)
+                        textBoxReception.Text = textBoxReception.Text.Substring(0, 200);
+                    currentByteList.Clear();
+                }
+
+                    // Vider la liste currentByteList
+                   
+                
+
+             
+
+               // char msg = (char)c;
+
+              //  string msgString = msg.ToString();
+
+               // serialPort1.Write(msgString);
+
+
+
+
             }
-            oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
+            //oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
             //asservSpeedDisplay2.UpdateIndependantOdometrySpeed(robot.positionX, robot.positionY);
-            asservSpeedDisplay2.UpdatePolarOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
+            //asservSpeedDisplay2.UpdatePolarOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
             //asservSpeedDisplay2.UpdatePolarSpeedConsigneValues(robot.consigneGauche, robot.consigneDroite);
            
         }
+
+        List<byte> byteListReceived = new List<byte>();
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
             ///robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
             foreach (var c in e.Data) {
-                robot.byteListReceived.Enqueue(c);
+                if (c != '\r')
+                {
+                    if (c != '\n')
+                        byteListReceived.Add(c);
+                }
+                else
+                {
+                    /// On a une trame complète
+                    string s = Encoding.ASCII.GetString(byteListReceived.ToArray());
+                    Console.WriteLine(s);
+                    try
+                    {
+                        /// Des fois, ça merde, car on a des trames d'init de la caméra qui arrivent
+                        var sp = s.Split(' ');
+                        BallPerception bp = new BallPerception();
+                        bp.xImage = int.Parse(sp[0]) - 1920 / 2;
+                        bp.yImage = 540-int.Parse(sp[1]);
+                        bp.diameterImage = int.Parse(sp[2]);
+
+                        Console.WriteLine("X : " + bp.xImage + " Y : " + bp.yImage + " Diameter : " + bp.diameterImage);
+
+                        ///Calcul des angles alpha et theta :
+                        ///alpha est la tan-1 de la distance de la balle au centre en pixels / distance au centre d'un pt à 45°
+                        var distanceBalleCentrePx = Math.Sqrt(bp.xImage*bp.xImage + bp.yImage*bp.yImage);
+                        bp.alphaAngle = Math.Atan2(distanceBalleCentrePx, 612);
+
+                        Console.WriteLine("Alpha : " + bp.alphaAngle * 180 / Math.PI);
+
+                        /// theta est la tan-1 de xball / yball
+                        bp.thetaAngle = Math.Atan2(-bp.xImage, bp.yImage);
+                        Console.WriteLine("Theta : " + bp.thetaAngle * 180 / Math.PI);
+
+                        /// Reste à faire les rotations 3D de l'axe optique pour obtenir
+                        /// 1 - l'axe dans le plan vertical de la paroi du cône qui est une rotation d'angle alpha de l'axe optique autour de l'axe Y
+      
+                        Vector3D opticalAxis = new Vector3D(1, 0, 0);
+                        Vector3D rotatedAxis = opticalAxis.RotateAroundY(bp.alphaAngle);
+                        Console.WriteLine($"Rotated Axis: Xi ={rotatedAxis.Xi},Yi={rotatedAxis.Yi},Zi={rotatedAxis.Zi}");
+                    }
+                    catch
+                    {
+
+                     }
+                    byteListReceived.Clear();
+                }
+                //robot.byteListReceived.Enqueue(c);
             }
         }
 
@@ -128,25 +222,26 @@ namespace RobotInterfaceNet
         }
         private void textBoxReception_KeyUp(object sender, KeyEventArgs e)
         {
-            
+            textBoxReception.Text = receivedText;
 
         }
 
 
          public void functionRecu(int a)
          {
-             textBoxReception.Text = receivedText;
-             serialPort1.WriteLine(textBoxEmission.Text);
-             if (a == 0)
-             {
-                 textBoxReception.Text += "Reçu envoyer: " + textBoxEmission.Text + "\n";
-                 textBoxEmission.Text = "";
-             }
-             else if (a == 1)
-             {
-                 textBoxReception.Text += "Reçu via envoyer: " + textBoxEmission.Text + "\n";
-                 textBoxEmission.Text = "";
-             }
+            
+             //textBoxReception.Text = receivedText;
+             //serialPort1.WriteLine(textBoxEmission.Text);
+             //if (a == 0)
+             //{
+             //    textBoxReception.Text += "Reçu envoyer: " + textBoxEmission.Text + "\n";
+             //    textBoxEmission.Text = "";
+             //}
+             //else if (a == 1)
+             //{
+             //    textBoxReception.Text += "Reçu via envoyer: " + textBoxEmission.Text + "\n";
+             //    textBoxEmission.Text = "";
+             //}
 
          }
 
@@ -201,8 +296,8 @@ namespace RobotInterfaceNet
 
 
             UartEncodeAndSendMessage(0x0063, 30, tabasx);
-            asservSpeedDisplay2.UpdatePolarSpeedErrorValues(erreurX, erreurT);
-            asservSpeedDisplay2.UpdatePolarOdometrySpeed(kpX, kpT);
+            //asservSpeedDisplay2.UpdatePolarSpeedErrorValues(erreurX, erreurT);
+            //asservSpeedDisplay2.UpdatePolarOdometrySpeed(kpX, kpT);
         }
         public enum msgFonction
         {
@@ -328,12 +423,12 @@ namespace RobotInterfaceNet
                     robot.vitesseLin = BitConverter.ToSingle(msgPayload, 16);
                     robot.vitesseAng = BitConverter.ToSingle(msgPayload, 20);
 
-                    tempsCourant.Content = "Temps : " + robot.timestamp;
-                    posX.Content = "Position X : " + robot.positionX;
-                    posY.Content = "Position Y : " + robot.positionY;
-                    angRad.Content = "Angle en radian : " + robot.angleRad;
-                    vitLin.Content = "Vitesse linéaire : " + robot.vitesseLin;
-                    vitAng.Content = "Vitesse angulaire : " + robot.vitesseAng;
+                   // tempsCourant.Content = "Temps : " + robot.timestamp;
+                  //  posX.Content = "Position X : " + robot.positionX;
+                  //  posY.Content = "Position Y : " + robot.positionY;
+                  //  angRad.Content = "Angle en radian : " + robot.angleRad;
+                 //   vitLin.Content = "Vitesse linéaire : " + robot.vitesseLin;
+                 //   vitAng.Content = "Vitesse angulaire : " + robot.vitesseAng;
 
                     break;
 
@@ -495,4 +590,51 @@ namespace RobotInterfaceNet
             STATE_RECULE_EN_COURS = 15
         }
     }
+
+    public class BallPerception
+    {
+        public int xImage;
+        public int yImage;
+        public int diameterImage;
+
+        public double diameter;
+        public double alphaAngle;
+        public double thetaAngle;
+
+        public double xPosRefCamera;
+        public double yPosRefCamera;
+        public double zPosRefCamera;
+    }
+
+
+  
+ class Vector3D
+    {
+        public double Xi, Yi, Zi;
+        
+        public Vector3D(double x, double y, double z)
+        {
+            Xi = x;
+            Yi = y;
+            Zi = z;
+        }
+        public Vector3D RotateAroundY(double angleRadians)
+        {
+            double cosTheta = Math.Cos(angleRadians);
+            double sinTheta = Math.Sin(angleRadians);
+
+            double newX = cosTheta * Xi+sinTheta*Zi;
+            double newY = Yi;
+            double newZ = -sinTheta * Xi+cosTheta*Zi;
+
+            return new Vector3D(newX, newY, newZ);
+
+
+
+        }
+
+    }     
+   
+
+
 }
