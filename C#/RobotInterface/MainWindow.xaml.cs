@@ -1,29 +1,21 @@
 ﻿using ExtendedSerialPort;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO.Ports;
 using System.Windows.Threading;
 using SciChart.Charting.Visuals;
 using System.Diagnostics;
-using SciChart;
-using System.Globalization;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+using MathNet.Spatial.Euclidean;
 
-namespace RobotInterfaceNet
+
+
+    
+    
+    namespace RobotInterfaceNet
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
@@ -39,7 +31,7 @@ namespace RobotInterfaceNet
             // Set this code once in App.xaml.cs or application startup
             SciChartSurface.SetRuntimeLicenseKey("osuraiMh+/Ur8XOBfDQ8DGxK4LgYsM/LqTbAxL+Zr/plYfLTO8DCQqcE5HEX0FNuCbD4UhyjOWV8n7OfWJPpsgOBUy+YzmjEgegfGB6FT5X/CSO2T/RmZMkumH+dPLGF+MluNzd9wPXBdefHmN5vz7vVIGM+XSqWrTSeQU8sp49g3HTgiFHs1I7zb+h2Dprp+56rEKr0e2FfGpn2n/CTkb/NxfkyYHsYp4+aGYhTE/VjaozHfzPm3/oP6qKO6wSWmzCikHOnk9XKYFPJwZtqKjCR6shU2HaINnKlroD8/1m8v4QWnLDvHk2rLjmekbEcfMD0dRkKKpCo4//gmwtWl9BHR3n75WBLNh4JyReLNUZvMsR/ObrRpcBJOKoi9ALDzW7Y/HE90g8Hqqo31Et/ZoqR68AZzDPXzc1J7VYxBrzgkJEr/YwXxO6pVZsczo3wAVKdDB4qwnv0o6R9URSJOc7wA8cBkiqrz4XxIQUDqqbIN1Z9En/PKpKiJS2a3Zq+n7snJ8vj"); 
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM10", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM17", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -68,7 +60,6 @@ namespace RobotInterfaceNet
               }*/
             while (robot.byteListReceived.Count > 0)
             {
-
                 var c = robot.byteListReceived.Dequeue();
                 if(c!='\r' && c != '\n')
                 {
@@ -146,6 +137,7 @@ namespace RobotInterfaceNet
                         ///Calcul des angles alpha et theta :
                         ///alpha est la tan-1 de la distance de la balle au centre en pixels / distance au centre d'un pt à 45°
                         var distanceBalleCentrePx = Math.Sqrt(bp.xImage*bp.xImage + bp.yImage*bp.yImage);
+                        
                         bp.alphaAngle = Math.Atan2(distanceBalleCentrePx, 612);
 
                         Console.WriteLine("Alpha : " + bp.alphaAngle * 180 / Math.PI);
@@ -158,8 +150,17 @@ namespace RobotInterfaceNet
                         /// 1 - l'axe dans le plan vertical de la paroi du cône qui est une rotation d'angle alpha de l'axe optique autour de l'axe Y
       
                         Vector3D opticalAxis = new Vector3D(1, 0, 0);
-                        Vector3D rotatedAxis = opticalAxis.RotateAroundY(bp.alphaAngle);
-                        Console.WriteLine($"Rotated Axis: Xi ={rotatedAxis.Xi},Yi={rotatedAxis.Yi},Zi={rotatedAxis.Zi}");
+
+                        var matRotY = Matrix3D.RotationAroundYAxis(MathNet.Spatial.Units.Angle.FromRadians(bp.alphaAngle));
+                        Vector3D rotatedAxis = opticalAxis.TransformBy(matRotY);
+
+                        var matRottheta = Matrix3D.RotationAroundArbitraryVector(opticalAxis.Normalize(), MathNet.Spatial.Units.Angle.FromRadians(bp.thetaAngle));
+                        var axeObjet = rotatedAxis.TransformBy(matRottheta);
+
+
+
+                        Console.WriteLine($"Rotated Axis: Xi ={rotatedAxis.X},Yi={rotatedAxis.Y},Zi={rotatedAxis.Z}");
+                        
                     }
                     catch
                     {
@@ -608,32 +609,32 @@ namespace RobotInterfaceNet
 
 
   
- class Vector3D
-    {
-        public double Xi, Yi, Zi;
+ //class Vector3D
+ //   {
+ //       public double Xi, Yi, Zi;
         
-        public Vector3D(double x, double y, double z)
-        {
-            Xi = x;
-            Yi = y;
-            Zi = z;
-        }
-        public Vector3D RotateAroundY(double angleRadians)
-        {
-            double cosTheta = Math.Cos(angleRadians);
-            double sinTheta = Math.Sin(angleRadians);
+ //       public Vector3D(double x, double y, double z)
+ //       {
+ //           Xi = x;
+ //           Yi = y;
+ //           Zi = z;
+ //       }
+ //       public Vector3D RotateAroundY(double angleRadians)
+ //       {
+ //           double cosTheta = Math.Cos(angleRadians);
+ //           double sinTheta = Math.Sin(angleRadians);
 
-            double newX = cosTheta * Xi+sinTheta*Zi;
-            double newY = Yi;
-            double newZ = -sinTheta * Xi+cosTheta*Zi;
+ //           double newX = cosTheta * Xi+sinTheta*Zi;
+ //           double newY = Yi;
+ //           double newZ = -sinTheta * Xi+cosTheta*Zi;
 
-            return new Vector3D(newX, newY, newZ);
+ //           return new Vector3D(newX, newY, newZ);
 
 
 
-        }
+ //       }
 
-    }     
+ //   }     
    
 
 
