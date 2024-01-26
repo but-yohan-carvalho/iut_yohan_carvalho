@@ -10,28 +10,47 @@ using System.Windows.Threading;
 using SciChart.Charting.Visuals;
 using System.Diagnostics;
 using MathNet.Spatial.Euclidean;
+using SciChart.Charting3D.Model;
+using SciChart.Charting3D.PointMarkers;
+using System.Linq;
+using SciChart.Charting.Visuals.RenderableSeries;
+using SciChart.Charting.Visuals.PointMarkers;
+using SciChart.Charting3D.RenderableSeries;
+using SciChart.Charting3D;
+using SciChart.Charting.Visuals.Annotations;
+using SciChart.Charting.Model.DataSeries;
+using System.Windows.Media.Media3D;
+using MathNet.Spatial;
+using MathNet.Numerics;
+using MathNet.Numerics.LinearAlgebra;
 
 
+using Vector3D = MathNet.Spatial.Euclidean.Vector3D;
+using Point3D = System.Windows.Media.Media3D.Point3D;
+using Matrix3D = MathNet.Spatial.Euclidean.Matrix3D;
 
-    
-    
-    namespace RobotInterfaceNet
+namespace RobotInterfaceNet
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         Robot robot = new Robot();
         DispatcherTimer timerAffichage;
         ReliableSerialPort serialPort1;
+        //var dataSeries3D<double> = new XyzDataSeries3D<double>();
+        XyzDataSeries3D<double> xyzDataSeries3D = new XyzDataSeries3D<double>();
+        ScatterRenderableSeries3D renderSerias = new ScatterRenderableSeries3D();   
+
+
         public MainWindow()
         {
             // Set this code once in App.xaml.cs or application startup
             // Set this code once in App.xaml.cs or application startup
             SciChartSurface.SetRuntimeLicenseKey("osuraiMh+/Ur8XOBfDQ8DGxK4LgYsM/LqTbAxL+Zr/plYfLTO8DCQqcE5HEX0FNuCbD4UhyjOWV8n7OfWJPpsgOBUy+YzmjEgegfGB6FT5X/CSO2T/RmZMkumH+dPLGF+MluNzd9wPXBdefHmN5vz7vVIGM+XSqWrTSeQU8sp49g3HTgiFHs1I7zb+h2Dprp+56rEKr0e2FfGpn2n/CTkb/NxfkyYHsYp4+aGYhTE/VjaozHfzPm3/oP6qKO6wSWmzCikHOnk9XKYFPJwZtqKjCR6shU2HaINnKlroD8/1m8v4QWnLDvHk2rLjmekbEcfMD0dRkKKpCo4//gmwtWl9BHR3n75WBLNh4JyReLNUZvMsR/ObrRpcBJOKoi9ALDzW7Y/HE90g8Hqqo31Et/ZoqR68AZzDPXzc1J7VYxBrzgkJEr/YwXxO6pVZsczo3wAVKdDB4qwnv0o6R9URSJOc7wA8cBkiqrz4XxIQUDqqbIN1Z9En/PKpKiJS2a3Zq+n7snJ8vj"); 
             InitializeComponent();
-            serialPort1 = new ReliableSerialPort("COM17", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ReliableSerialPort("COM10", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -41,7 +60,22 @@ using MathNet.Spatial.Euclidean;
             timerAffichage.Start();
             //oscilloSpeed.AddOrUpdateLine(1, 200, "Ligne1");
             //oscilloSpeed.ChangeLineColor(1, Color.FromRgb(255,0,100));
-           
+            
+            renderSerias.DataSeries = xyzDataSeries3D;
+            renderSerias.PointMarker = new CubePointMarker3D();
+            renderSerias.PointMarker.Size = 5;
+            SciChart.RenderableSeries.Add(renderSerias);
+
+
+            var camera = new Camera3D();
+            camera.Position = new Vector3 (200, -200, 200);        
+            camera.Target = new Vector3 (0,0,0);
+            camera.OrbitalPitch = 25;
+            camera.OrbitalYaw = -55;  
+            SciChart.Camera = camera;
+
+
+
 
 
         }
@@ -109,6 +143,8 @@ using MathNet.Spatial.Euclidean;
         }
 
         List<byte> byteListReceived = new List<byte>();
+        List<Point3D>trajectoire = new List<Point3D>();
+        
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
             ///robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
@@ -157,15 +193,39 @@ using MathNet.Spatial.Euclidean;
                         var matRottheta = Matrix3D.RotationAroundArbitraryVector(opticalAxis.Normalize(), MathNet.Spatial.Units.Angle.FromRadians(bp.thetaAngle));
                         var axeObjet = rotatedAxis.TransformBy(matRottheta);
 
+                        double distance = 120.0 / bp.diameterImage;
+                        Vector3D ballpos = distance * axeObjet;
+                        trajectoire.Add(new Point3D(ballpos.X, ballpos.Y,ballpos.Z));
+                        while (trajectoire.Count >10)
+                        {
+                            trajectoire.RemoveAt(0);
+                        }
+
+                        xyzDataSeries3D.Append(
+                            trajectoire.Select(o => o.X).ToList(), 
+                            trajectoire.Select(o => o.Y).ToList(), 
+                            trajectoire.Select(o => o.Z).ToList());
+                        SciChart.InvalidateArrange();
 
 
-                        Console.WriteLine($"Rotated Axis: Xi ={rotatedAxis.X},Yi={rotatedAxis.Y},Zi={rotatedAxis.Z}");
+                        //var lineSeries3D = new PointLineRenderableSeries3D
+                        //{
+                        //    DataSeries = dataSeries3D,
+                        //    Stroke = Colors.Yellow,
+                        //    StrokeThickness = 2
+                        //};
+
+                        //var marker3D = new PointMarker
+                        //{
+                            
+                        //};
+                       // Console.WriteLine($"Rotated Axis: Xi ={rotatedAxis.X},Yi={rotatedAxis.Y},Zi={rotatedAxis.Z}");
                         
                     }
                     catch
                     {
 
-                     }
+                    }
                     byteListReceived.Clear();
                 }
                 //robot.byteListReceived.Enqueue(c);
@@ -636,6 +696,5 @@ using MathNet.Spatial.Euclidean;
 
  //   }     
    
-
 
 }
