@@ -60,21 +60,21 @@
             <s3D:SciChart3DSurface.RenderableSeries>
                 <s3D:ScatterRenderableSeries3D x:Name="ScatterSeries3D">
                     <s3D:ScatterRenderableSeries3D.PointMarker>
-                        <s3D:EllipsePointMarker3D Fill="Red" Size="10.0" Opacity="1"/>
+                        <s3D:EllipsePointMarker3D Fill="Red" Size="1.0" Opacity="1"/>
                     </s3D:ScatterRenderableSeries3D.PointMarker>
                 </s3D:ScatterRenderableSeries3D>
             </s3D:SciChart3DSurface.RenderableSeries>
 
             <s3D:SciChart3DSurface.XAxis>
-                <s3D:NumericAxis3D GrowBy="-6,6"/>
+                <s3D:NumericAxis3D GrowBy="-4,4"/>
             </s3D:SciChart3DSurface.XAxis>
 
             <s3D:SciChart3DSurface.YAxis>
-                <s3D:NumericAxis3D GrowBy="0, 3" NegativeSideClipping="VisibleRange" PositiveSideClipping="VisibleRange"/>
+                <s3D:NumericAxis3D GrowBy="0, 2" NegativeSideClipping="VisibleRange" PositiveSideClipping="VisibleRange"/>
             </s3D:SciChart3DSurface.YAxis>
 
             <s3D:SciChart3DSurface.ZAxis>
-                <s3D:NumericAxis3D GrowBy="-4, 4"/>
+                <s3D:NumericAxis3D GrowBy="3, 3"/>
             </s3D:SciChart3DSurface.ZAxis>
 
         </s3D:SciChart3DSurface>

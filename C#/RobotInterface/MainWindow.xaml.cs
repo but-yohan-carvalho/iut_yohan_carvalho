@@ -25,9 +25,13 @@ using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 
 
-using Vector3D = MathNet.Spatial.Euclidean.Vector3D;
-using Point3D = System.Windows.Media.Media3D.Point3D;
+
 using Matrix3D = MathNet.Spatial.Euclidean.Matrix3D;
+using SciChart.Charting3D.Axis;
+using SciChart.Data.Model;
+using SciChart.Charting.ChartModifiers;
+using Vector3D = MathNet.Spatial.Euclidean.Vector3D;
+using Point3D = MathNet.Spatial.Euclidean.Point3D;
 
 namespace RobotInterfaceNet
 {
@@ -67,10 +71,13 @@ namespace RobotInterfaceNet
             SciChart.RenderableSeries.Add(renderSerias);
 
 
+
+
+
             var camera = new Camera3D();
             camera.Position = new Vector3 (200, -200, 200);        
             camera.Target = new Vector3 (0,0,0);
-            camera.OrbitalPitch = 25;
+            camera.OrbitalPitch = 30;
             camera.OrbitalYaw = -55;  
             SciChart.Camera = camera;
 
@@ -135,6 +142,8 @@ namespace RobotInterfaceNet
 
 
             }
+
+
             //oscilloSpeed.AddPointToLine(1, robot.positionX, robot.positionY);
             //asservSpeedDisplay2.UpdateIndependantOdometrySpeed(robot.positionX, robot.positionY);
             //asservSpeedDisplay2.UpdatePolarOdometrySpeed(robot.vitesseLin, robot.vitesseAng);
@@ -144,6 +153,8 @@ namespace RobotInterfaceNet
 
         List<byte> byteListReceived = new List<byte>();
         List<Point3D>trajectoire = new List<Point3D>();
+
+
         
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
@@ -164,16 +175,20 @@ namespace RobotInterfaceNet
                         /// Des fois, ça merde, car on a des trames d'init de la caméra qui arrivent
                         var sp = s.Split(' ');
                         BallPerception bp = new BallPerception();
+
+
                         bp.xImage = int.Parse(sp[0]) - 1920 / 2;
-                        bp.yImage = 540-int.Parse(sp[1]);
+                        bp.yImage = 540 - int.Parse(sp[1]);
                         bp.diameterImage = int.Parse(sp[2]);
+
+
 
                         Console.WriteLine("X : " + bp.xImage + " Y : " + bp.yImage + " Diameter : " + bp.diameterImage);
 
                         ///Calcul des angles alpha et theta :
                         ///alpha est la tan-1 de la distance de la balle au centre en pixels / distance au centre d'un pt à 45°
-                        var distanceBalleCentrePx = Math.Sqrt(bp.xImage*bp.xImage + bp.yImage*bp.yImage);
-                        
+                        var distanceBalleCentrePx = Math.Sqrt(bp.xImage * bp.xImage + bp.yImage * bp.yImage);
+
                         bp.alphaAngle = Math.Atan2(distanceBalleCentrePx, 612);
 
                         Console.WriteLine("Alpha : " + bp.alphaAngle * 180 / Math.PI);
@@ -184,7 +199,7 @@ namespace RobotInterfaceNet
 
                         /// Reste à faire les rotations 3D de l'axe optique pour obtenir
                         /// 1 - l'axe dans le plan vertical de la paroi du cône qui est une rotation d'angle alpha de l'axe optique autour de l'axe Y
-      
+
                         Vector3D opticalAxis = new Vector3D(1, 0, 0);
 
                         var matRotY = Matrix3D.RotationAroundYAxis(MathNet.Spatial.Units.Angle.FromRadians(bp.alphaAngle));
@@ -193,19 +208,47 @@ namespace RobotInterfaceNet
                         var matRottheta = Matrix3D.RotationAroundArbitraryVector(opticalAxis.Normalize(), MathNet.Spatial.Units.Angle.FromRadians(bp.thetaAngle));
                         var axeObjet = rotatedAxis.TransformBy(matRottheta);
 
-                        double distance = 120.0 / bp.diameterImage;
-                        Vector3D ballpos = distance * axeObjet;
-                        trajectoire.Add(new Point3D(ballpos.X, ballpos.Y,ballpos.Z));
-                        while (trajectoire.Count >10)
+
+
+                        //// Récupérer les axes de la surface SciChart
+                        SciChart.Dispatcher.Invoke(() =>
                         {
-                            trajectoire.RemoveAt(0);
+                            var xAxis = SciChart.XAxis as NumericAxis3D;
+                            var yAxis = SciChart.YAxis as NumericAxis3D;
+                            var zAxis = SciChart.ZAxis as NumericAxis3D;
+
+                            //// Définir les nouvelles plages (échelles)
+                            xAxis.VisibleRange = new DoubleRange(-1, 5);
+                            yAxis.VisibleRange = new DoubleRange(-2, 2);
+                            zAxis.VisibleRange = new DoubleRange(-2, 2);
+                        });
+
+
+
+                        if (bp.diameterImage != 0)
+                        {
+                            double distance = 100.0 / bp.diameterImage;
+
+                            Vector3D ballpos = distance * axeObjet;
+                            trajectoire.Add(new Point3D(ballpos.X, ballpos.Y, ballpos.Z));
+                            Console.WriteLine($"ballposition: Xi ={ballpos.X},Yi={ballpos.Y},Zi={ballpos.Z} \n");
+                        //Console.WriteLine("\n Xi =" + ballpos.X,"Yi=" + ballpos.Y, "Zi=" + ballpos.Z);
+
+                        while (trajectoire.Count > 50)
+                            {
+                                trajectoire.RemoveAt(0);
+                            }
+
+                            xyzDataSeries3D.Clear();
+                            xyzDataSeries3D.Append(
+                                trajectoire.Select(o => o.X).ToList(),
+                                trajectoire.Select(o => o.Y).ToList(),
+                                trajectoire.Select(o => o.Z).ToList());
+                            SciChart.InvalidateArrange();
+                           
+
                         }
 
-                        xyzDataSeries3D.Append(
-                            trajectoire.Select(o => o.X).ToList(), 
-                            trajectoire.Select(o => o.Y).ToList(), 
-                            trajectoire.Select(o => o.Z).ToList());
-                        SciChart.InvalidateArrange();
 
 
                         //var lineSeries3D = new PointLineRenderableSeries3D
@@ -215,12 +258,13 @@ namespace RobotInterfaceNet
                         //    StrokeThickness = 2
                         //};
 
-                        //var marker3D = new PointMarker
-                        //{
-                            
-                        //};
-                       // Console.WriteLine($"Rotated Axis: Xi ={rotatedAxis.X},Yi={rotatedAxis.Y},Zi={rotatedAxis.Z}");
-                        
+                        var marker3D = new PointMarker
+                        {
+
+                            //};
+                            // Console.WriteLine($"Rotated Axis: Xi ={rotatedAxis.X},Yi={rotatedAxis.Y},Zi={rotatedAxis.Z}");
+
+                        };
                     }
                     catch
                     {
