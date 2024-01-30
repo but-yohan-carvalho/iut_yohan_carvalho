@@ -75,7 +75,7 @@ namespace RobotInterfaceNet
 
 
             var camera = new Camera3D();
-            camera.Position = new Vector3 (200, -200, 200);        
+            camera.Position = new Vector3 (800, -300, 100);        
             camera.Target = new Vector3 (0,0,0);
             camera.OrbitalPitch = 30;
             camera.OrbitalYaw = -55;  
@@ -154,8 +154,26 @@ namespace RobotInterfaceNet
         List<byte> byteListReceived = new List<byte>();
         List<Point3D>trajectoire = new List<Point3D>();
 
+        //private (Point3D, double) Prediction(List<Point3D> trajectoire)
+        //{
+        //    int nbPtsUsedForPrediction = 5;
+        //    if (trajectoire.Count > nbPtsUsedForPrediction)
+        //    {
+        //        var trajRecente = trajectoire.Reverse<Point3D>().Take(nbPtsUsedForPrediction).Reverse<Point3D>();
 
-        
+        //        double[] ptX = trajectoire.Select(x => x.X).ToArray();
+        //        double[] ptY = trajectoire.Select(y => y.Y).ToArray();
+        //        double[] ptZ = trajectoire.Select(z => z.Z).ToArray();
+
+        //        double[] ptT = new double[nbPtsUsedForPrediction];
+
+
+
+        //    }
+
+        //}
+
+
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
             ///robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
@@ -200,14 +218,23 @@ namespace RobotInterfaceNet
                         /// Reste à faire les rotations 3D de l'axe optique pour obtenir
                         /// 1 - l'axe dans le plan vertical de la paroi du cône qui est une rotation d'angle alpha de l'axe optique autour de l'axe Y
 
+                        //Vector3D opticalAxis = new Vector3D(1, 0, 0); anncienne
+
+                        //var matRotY = Matrix3D.RotationAroundYAxis(MathNet.Spatial.Units.Angle.FromRadians(bp.alphaAngle));
+                        //Vector3D rotatedAxis = opticalAxis.TransformBy(matRotY);
+
+                        //var matRottheta = Matrix3D.RotationAroundArbitraryVector(opticalAxis.Normalize(), MathNet.Spatial.Units.Angle.FromRadians(bp.thetaAngle));
+                        //var axeObjet = rotatedAxis.TransformBy(matRottheta);
+
+
+
                         Vector3D opticalAxis = new Vector3D(1, 0, 0);
 
-                        var matRotY = Matrix3D.RotationAroundYAxis(MathNet.Spatial.Units.Angle.FromRadians(bp.alphaAngle));
+                        var matRotY = Matrix3D.RotationAroundYAxis(MathNet.Spatial.Units.Angle.FromRadians(-bp.thetaAngle));
                         Vector3D rotatedAxis = opticalAxis.TransformBy(matRotY);
 
-                        var matRottheta = Matrix3D.RotationAroundArbitraryVector(opticalAxis.Normalize(), MathNet.Spatial.Units.Angle.FromRadians(bp.thetaAngle));
+                        var matRottheta = Matrix3D.RotationAroundArbitraryVector(opticalAxis.Normalize(), MathNet.Spatial.Units.Angle.FromRadians(bp.alphaAngle));
                         var axeObjet = rotatedAxis.TransformBy(matRottheta);
-
 
 
                         //// Récupérer les axes de la surface SciChart
